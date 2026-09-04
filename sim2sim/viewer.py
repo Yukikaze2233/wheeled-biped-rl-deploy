@@ -18,7 +18,8 @@ import numpy as np  # noqa: E402
 from mujoco import viewer as mj_viewer  # noqa: E402
 
 from mujoco_sim2sim import (  # noqa: E402
-    STEPS_PER_POLICY, actuator_ids_of, build_obs, spring_binding, step_control,
+    LEG_JOINTS, STEPS_PER_POLICY, actuator_ids_of, build_obs,
+    gas_spring_force, spring_binding, step_control,
 )
 
 
@@ -91,9 +92,6 @@ def main():
             data.ctrl[leg_act[k]] = 80.0 * (0.0 - q) - 2.0 * dq
         for a in wheel_act:
             data.ctrl[a] = 0.0
-        for _, a in spring_act:
-            from mujoco_sim2sim import gas_spring_force
-            pass  # spring handled below
 
     with mj_viewer.launch_passive(mj, data, key_callback=key_cb) as v:
         tick = 0
