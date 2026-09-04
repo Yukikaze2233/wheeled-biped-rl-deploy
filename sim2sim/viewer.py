@@ -34,13 +34,17 @@ def main():
     p.add_argument("--spring-ff", type=float, default=0.0)
     p.add_argument("--no-follow", action="store_true",
                    help="disable camera look-at tracking (keep free camera)")
+    p.add_argument("--height", type=float, default=0.38,
+                   help="spawn height (training init pose)")
+    p.add_argument("--prepare-s", type=float, default=1.0,
+                   help="PREPARE phase: legs PD-hold at 0 rad before RL engages")
     args = p.parse_args()
 
     import onnxruntime as ort
 
     mj = mujoco.MjModel.from_xml_path(args.model)
     data = mujoco.MjData(mj)
-    data.qpos[2] = 0.30
+    data.qpos[2] = args.height
     mujoco.mj_forward(mj, data)
 
     sess = ort.InferenceSession(args.policy, providers=["CPUExecutionProvider"])
@@ -77,9 +81,37 @@ def main():
         action = sess.run(None, {i_name: obs[None]})[0][0]
         last_action = action.copy()
 
+    prepare_ticks = int(args.prepare_s * 500)
+
+    def prepare_control():
+        """official PREPARE: legs PD at default pose (Kp80/Kd2), wheels free."""
+        for k, jname in enumerate(LEG_JOINTS):
+            j = mj.joint(jname).id
+            q, dq = data.qpos[mj.jnt_qposadr[j]], data.qvel[mj.jnt_dofadr[j]]
+            data.ctrl[leg_act[k]] = 80.0 * (0.0 - q) - 2.0 * dq
+        for a in wheel_act:
+            data.ctrl[a] = 0.0
+        for _, a in spring_act:
+            from mujoco_sim2sim import gas_spring_force
+            pass  # spring handled below
+
     with mj_viewer.launch_passive(mj, data, key_callback=key_cb) as v:
         tick = 0
         while v.is_running():
+            if tick < prepare_ticks:
+                prepare_control()
+                # keep the gas spring modeled during PREPARE too
+                for (qadr, vadr), a in spring_act:
+                    from mujoco_sim2sim import gas_spring_force
+                    data.ctrl[a] = gas_spring_force(mj, data, qadr, vadr)
+                mujoco.mj_step(mj, data)
+                tick += 1
+                if tick % 10 == 0:
+                    if not args.no_follow:
+                        v.cam.lookat[:] = [data.qpos[0], data.qpos[1],
+                                           max(data.qpos[2], 0.0) + 0.15]
+                    v.sync()
+                continue
             if tick % STEPS_PER_POLICY == 0:
                 step_cb(mj, data)
             step_control(mj, data, action, leg_act, wheel_act, spring_act=spring_act)
