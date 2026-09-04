@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<!-- ROS2 deployment skeleton for the wheeled-biped RL policy.
+
+     wheeled_rl_controller: 500 Hz chainable controller, 50 Hz ONNX Runtime
+     inference behind a build flag (HAVE_ONNXRUNTIME). Joint interface layout
+     matches CONTRACT.md: 4 leg position commands + 2 wheel velocity commands.
+
+     Build: colcon build --packages-select wheeled_rl_controller
+-->
+<package format="3">
+  <name>wheeled_rl_controller</name>
+  <version>0.1.0</version>
+  <description>RL policy controller for the wheeled biped (sim2real)</description>
+  <maintainer email="yukikaze@local">Yukikaze</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <depend>controller_interface</depend>
+  <depend>hardware_interface</depend>
+  <depend>pluginlib</depend>
+  <depend>rclcpp</depend>
+  <depend>rclcpp_lifecycle</depend>
+  <depend>geometry_msgs</depend>
+  <depend>std_msgs</depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>

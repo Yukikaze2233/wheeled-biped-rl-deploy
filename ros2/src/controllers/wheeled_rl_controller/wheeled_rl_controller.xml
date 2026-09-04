@@ -1,0 +1,7 @@
+<library path="wheeled_rl_controller">
+  <class name="wheeled_rl/WheeledRLController"
+         type="wheeled_rl::WheeledRLController"
+         base_class_type="controller_interface::ControllerInterface">
+    <description>50 Hz ONNX policy over a 500 Hz control loop (CONTRACT.md).</description>
+  </class>
+</library>

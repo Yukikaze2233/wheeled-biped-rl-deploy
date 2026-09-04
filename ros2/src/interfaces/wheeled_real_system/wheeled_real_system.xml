@@ -1,0 +1,7 @@
+<library path="wheeled_real_system">
+  <class name="wheeled_real_system/WheeledRealSystem"
+         type="wheeled_real_system::WheeledRealSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>Single-serial RealBridge backend (frame layout in real_system.hpp).</description>
+  </class>
+</library>

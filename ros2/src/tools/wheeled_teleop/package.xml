@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>wheeled_teleop</name>
+  <version>0.1.0</version>
+  <description>Keyboard teleop for the wheeled biped RL controller</description>
+  <maintainer email="yukikaze@local">Yukikaze</maintainer>
+  <license>MIT</license>
+  <export><build_type>ament_python</build_type></export>
+</package>

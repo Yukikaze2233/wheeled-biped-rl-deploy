@@ -1,0 +1,7 @@
+<library path="wheeled_mujoco_system">
+  <class name="wheeled_mujoco_system/WheeledMujocoSystem"
+         type="wheeled_mujoco_system::WheeledMujocoSystem"
+         base_class_type="hardware_interface::SystemInterface">
+    <description>MuJoCo physics as a ros2_control hardware backend (sim).</description>
+  </class>
+</library>

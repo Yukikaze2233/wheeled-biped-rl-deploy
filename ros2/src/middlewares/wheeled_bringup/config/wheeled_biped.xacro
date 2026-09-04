@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!-- Minimal xacro for the ros2_control block. The full URDF comes from the
+     robot description package; backend:=sim|real selects the hardware plugin. -->
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="wheeled_biped">
+  <xacro:arg name="backend" default="sim"/>
+  <xacro:arg name="policy_path" default="policy/policy.onnx"/>
+
+  <ros2_control name="WheeledBipedSystem" type="system">
+    <hardware>
+      <xacro:if value="${'$(arg backend)' == 'sim'}">
+        <plugin>wheeled_mujoco_system/WheeledMujocoSystem</plugin>
+        <param name="mjcf_path">models/wheeled_biped.xml</param>
+      </xacro:if>
+      <xacro:if value="${'$(arg backend)' == 'real'}">
+        <!-- TODO(yukikaze): RealBridge SystemInterface (serial protocol) -->
+        <plugin>NOT_IMPLEMENTED</plugin>
+      </xacro:if>
+    </hardware>
+
+    <joint name="left_front1_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_front1_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_rear1_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_rear1_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_wheel_joint">
+      <command_interface name="velocity"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <!-- synthetic IMU joint: gyro + projected gravity state interfaces -->
+    <joint name="imu">
+      <state_interface name="gyro.x"/>
+      <state_interface name="gyro.y"/>
+      <state_interface name="gyro.z"/>
+      <state_interface name="gravity.x"/>
+      <state_interface name="gravity.y"/>
+      <state_interface name="gravity.z"/>
+    </joint>
+  </ros2_control>
+</robot>

@@ -1,0 +1,28 @@
+# ros2_control configuration for the wheeled biped (CONTRACT.md).
+#
+# Controller manager runs at 500 Hz (one MuJoCo step per cycle, timestep
+# 0.002 s). Legs use position commands (firmware closes PD 60/2), wheels use
+# velocity commands (servo 0.2) — "hardware_pd_vel".
+controller_manager:
+  ros__parameters:
+    update_rate: 500  # Hz
+
+    joint_state_broadcaster:
+      type: joint_state_broadcaster/JointStateBroadcaster
+
+    wheeled_rl_controller:
+      type: wheeled_rl/WheeledRLController
+
+wheeled_rl_controller:
+  ros__parameters:
+    model_path: "policy/policy.onnx"   # 35D -> 6D, validated by check_onnx_contract.py
+
+wheeled_mujoco_system:
+  ros__parameters:
+    mjcf_path: "models/wheeled_biped.xml"
+
+# (real backend) replace the hardware plugin with the RealBridge SystemInterface:
+# wheeled_real_system:
+#   ros__parameters:
+#     port: /dev/ttyUSB0
+#     baudrate: 2000000

@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<package format="3">
+  <name>wheeled_bringup</name>
+  <version>0.1.0</version>
+  <description>Bringup for the wheeled biped: ros2_control + RL controller (sim/real)</description>
+  <maintainer email="yukikaze@local">Yukikaze</maintainer>
+  <license>MIT</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+  <exec_depend>controller_manager</exec_depend>
+  <exec_depend>robot_state_publisher</exec_depend>
+  <exec_depend>launch</exec_depend>
+  <exec_depend>launch_ros</exec_depend>
+  <exec_depend>xacro</exec_depend>
+  <exec_depend>wheeled_rl_controller</exec_depend>
+  <exec_depend>wheeled_mujoco_system</exec_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
