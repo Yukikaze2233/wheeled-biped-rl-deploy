@@ -35,15 +35,23 @@ MAX_WHEEL_VEL = 30.0
 CLIP_OBS = 100.0
 LEG_KP, LEG_KD = 60.0, 2.0
 WHEEL_KV = 0.2  # velocity servo torque per rad/s error
-LEG_JOINTS = ("left_front1_joint", "right_front1_joint", "left_rear1_joint", "right_rear1_joint")
+LEG_JOINTS = ("left_front1_joint", "left_rear1_joint", "right_front1_joint", "right_rear1_joint")
 WHEEL_JOINTS = ("left_wheel_joint", "right_wheel_joint")
 DEFAULT_LEG_POS = np.zeros(4)
+
+
+def _root_body_id(mj: mujoco.MjModel) -> int:
+    """Body attached to the free joint (root link name varies per model)."""
+    for j in range(mj.njnt):
+        if mj.jnt_type[j] == mujoco.mjtJoint.mjJNT_FREE:
+            return mj.jnt_bodyid[j]
+    raise ValueError("model has no free joint")
 
 
 def build_obs(mj: mujoco.MjModel, data: mujoco.MjData, cmd: np.ndarray,
               height_cmd: float, last_action: np.ndarray) -> np.ndarray:
     """Assemble the 35D observation per CONTRACT.md section 2."""
-    torso = mj.body("torso").id
+    torso = _root_body_id(mj)
 
     # body-frame angular velocity + linear velocity (flg_local=True)
     vel = np.zeros(6)
@@ -57,6 +65,7 @@ def build_obs(mj: mujoco.MjModel, data: mujoco.MjData, cmd: np.ndarray,
     leg_pos = np.array([
         data.qpos[mj.jnt_qposadr[mj.joint(n).id]] for n in LEG_JOINTS
     ]) - DEFAULT_LEG_POS
+
     leg_vel = np.array([data.qvel[mj.jnt_dofadr[mj.joint(n).id]] for n in LEG_JOINTS])
     wheel_vel = np.array([data.qvel[mj.jnt_dofadr[mj.joint(n).id]] for n in WHEEL_JOINTS])
 
