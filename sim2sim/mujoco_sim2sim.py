@@ -24,6 +24,86 @@ CTRL_HZ = 500.0
 POLICY_HZ = 50.0
 CTRL_DT = 1.0 / CTRL_HZ
 STEPS_PER_POLICY = int(CTRL_HZ / POLICY_HZ)
+# physics decimation: official MJCF runs timestep=0.001 -> 2 physics steps
+# per 2ms control tick; PD is recomputed EVERY physics step (their write())
+PHYSICS_STEPS_PER_TICK = 2
+
+# torque saturation (CONTRACT.md section 3; unbounded PD oscillates)
+LEG_TORQUE_LIMIT = 40.0
+WHEEL_TORQUE_LIMIT = 9.99
+# gas spring: official xacro values (force falls 650N->450N across travel,
+# i.e. deepest compression at q_min pushes hardest) + viscous damping
+SPRING_Q_MIN, SPRING_Q_MAX = -0.005, 0.07
+SPRING_FORCE_AT_QMIN, SPRING_FORCE_AT_QMAX = 650.0, 450.0
+SPRING_VISCOUS_DAMPING = 500.0
+
+
+def gas_spring_force(mj, data, spring_qadr, spring_vel_adr) -> float:
+    q = data.qpos[spring_qadr]
+    ratio = (min(max(q, SPRING_Q_MIN), SPRING_Q_MAX) - SPRING_Q_MIN) / (SPRING_Q_MAX - SPRING_Q_MIN)
+    spring_force = SPRING_FORCE_AT_QMIN + (SPRING_FORCE_AT_QMAX - SPRING_FORCE_AT_QMIN) * ratio
+    damping = -SPRING_VISCOUS_DAMPING * data.qvel[spring_vel_adr]
+    return spring_force + damping
+
+
+class ActuatorModel:
+    """Official leg-motor second-order response (semi-implicit Euler with
+    torque slew limit): wn=50Hz zeta=0.10 slew=1500Nm/s, speed droop after
+    4 rad/s, output limit 54 Nm."""
+
+    def __init__(self):
+        self.y = 0.0    # applied effort
+        self.yr = 0.0   # its rate
+
+    def step(self, request: float, vel: float, dt: float) -> float:
+        droop = max(0.0, abs(vel) - 4.0)
+        gain = max(1.0 - 0.055 * droop, 0.55)
+        target = gain * request
+        wn = 2 * 3.14159265 * 50.0
+        zeta = 0.10
+        acc = wn * wn * (target - self.y) - 2 * zeta * wn * self.yr
+        self.yr = min(max(self.yr + dt * acc, -1500.0), 1500.0)
+        self.y = min(max(self.y + dt * self.yr, -54.0), 54.0)
+        return self.y
+
+
+def spring_binding(mj):
+    """[((qpos_adr, vel_adr), actuator_id)] for both gas-spring joints."""
+    out = []
+    for side in ("left", "right"):
+        jn = f"{side}_spring2_joint"
+        a = mujoco.mj_name2id(mj, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{jn}_ctrl")
+        if a >= 0:
+            j = mj.joint(jn).id
+            out.append(((mj.jnt_qposadr[j], mj.jnt_dofadr[j]), a))
+    return out
+
+
+def step_control(mj, data, action, leg_act, wheel_act, spring_act=None,
+                 spring_bias=0.0, leg_models=None, dt=0.001):
+    """One 2ms control tick with official semantics: PD per physics substep,
+    torque saturation, gas-spring model force, leg-motor second-order model."""
+    leg_t = action[:4] * 0.5
+    wheel_v = np.clip(action[4:] * 10.0, -30, 30)
+    if leg_models is None:
+        leg_models = [ActuatorModel() for _ in LEG_JOINTS]
+        step_control.leg_models = leg_models
+    leg_models = getattr(step_control, "leg_models", leg_models)
+    for _ in range(PHYSICS_STEPS_PER_TICK):
+        for k, jname in enumerate(LEG_JOINTS):
+            j = mj.joint(jname).id
+            q, dq = data.qpos[mj.jnt_qposadr[j]], data.qvel[mj.jnt_dofadr[j]]
+            tau = LEG_KP * (leg_t[k] - q) - LEG_KD * dq
+            tau = float(np.clip(tau, -LEG_TORQUE_LIMIT, LEG_TORQUE_LIMIT))
+            data.ctrl[leg_act[k]] = leg_models[k].step(tau, dq, dt)
+        for k, jname in enumerate(WHEEL_JOINTS):
+            dq = data.qvel[mj.jnt_dofadr[mj.joint(jname).id]]
+            tau = WHEEL_KV * (wheel_v[k] - dq)
+            data.ctrl[wheel_act[k]] = np.clip(tau, -WHEEL_TORQUE_LIMIT, WHEEL_TORQUE_LIMIT)
+        if spring_act:
+            for (qadr, vadr), act in spring_act:
+                data.ctrl[act] = gas_spring_force(mj, data, qadr, vadr) + spring_bias
+        mujoco.mj_step(mj, data)
 
 # CONTRACT.md sections 2/3
 SCALE_ANG_VEL = 0.5

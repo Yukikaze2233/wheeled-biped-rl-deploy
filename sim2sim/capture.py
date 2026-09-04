@@ -60,16 +60,21 @@ def main():
             obs = build_obs(mj, data, cmd, 0.22, last_action)
             action = sess.run(None, {i_name: obs[None]})[0][0]
             last_action = action.copy()
-        leg_t = action[:4] * 0.5
-        wheel_v = np.clip(action[4:] * 10.0, -30, 30)
-        for k, jname in enumerate(LEG_JOINTS):
-            j = mj.joint(jname).id
-            q, dq = data.qpos[mj.jnt_qposadr[j]], data.qvel[mj.jnt_dofadr[j]]
-            data.ctrl[leg_act[k]] = LEG_KP * (leg_t[k] - q) - LEG_KD * dq
-        for k, jname in enumerate(WHEEL_JOINTS):
-            dq = data.qvel[mj.jnt_dofadr[mj.joint(jname).id]]
-            data.ctrl[wheel_act[k]] = WHEEL_KV * (wheel_v[k] - dq)
-        mujoco.mj_step(mj, data)
+    from mujoco_sim2sim import actuator_ids_of
+    leg_act, wheel_act = actuator_ids_of(mj)
+
+    cmd = np.array([args.vx, 0.0, 0.0], np.float32)
+    last_action = np.zeros(6, np.float32)
+    action = np.zeros(6, np.float32)
+
+    n_ticks = int(args.duration / CTRL_DT)
+    shot_every = max(int(args.shot_every / CTRL_DT), 1)
+    for tick in range(n_ticks):
+        if tick % STEPS_PER_POLICY == 0:
+            obs = build_obs(mj, data, cmd, 0.22, last_action)
+            action = sess.run(None, {i_name: obs[None]})[0][0]
+            last_action = action.copy()
+        step_control(mj, data, action, leg_act, wheel_act, spring_act=spring_act)
 
         if tick % shot_every == 0:
             cam = mujoco.MjvCamera()

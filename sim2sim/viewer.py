@@ -18,8 +18,7 @@ import numpy as np  # noqa: E402
 from mujoco import viewer as mj_viewer  # noqa: E402
 
 from mujoco_sim2sim import (  # noqa: E402
-    LEG_JOINTS, LEG_KD, LEG_KP, STEPS_PER_POLICY, WHEEL_JOINTS, WHEEL_KV,
-    actuator_ids_of, build_obs,
+    STEPS_PER_POLICY, actuator_ids_of, build_obs, spring_binding, step_control,
 )
 
 
@@ -45,8 +44,7 @@ def main():
     sess = ort.InferenceSession(args.policy, providers=["CPUExecutionProvider"])
     i_name = sess.get_inputs()[0].name
     leg_act, wheel_act = actuator_ids_of(mj)
-    spring_act = [a for a in (mujoco.mj_name2id(mj, mujoco.mjtObj.mjOBJ_ACTUATOR, f"{j}_ctrl")
-                              for j in ("left_spring2_joint", "right_spring2_joint")) if a >= 0]
+    spring_act = spring_binding(mj)
 
     last_action = np.zeros(6, np.float32)
     action = np.zeros(6, np.float32)
@@ -82,18 +80,7 @@ def main():
         while v.is_running():
             if tick % STEPS_PER_POLICY == 0:
                 step_cb(mj, data)
-            leg_t = action[:4] * 0.5
-            wheel_v = np.clip(action[4:] * 10.0, -30, 30)
-            for k, jname in enumerate(LEG_JOINTS):
-                j = mj.joint(jname).id
-                q, dq = data.qpos[mj.jnt_qposadr[j]], data.qvel[mj.jnt_dofadr[j]]
-                data.ctrl[leg_act[k]] = LEG_KP * (leg_t[k] - q) - LEG_KD * dq
-            for k, jname in enumerate(WHEEL_JOINTS):
-                dq = data.qvel[mj.jnt_dofadr[mj.joint(jname).id]]
-                data.ctrl[wheel_act[k]] = WHEEL_KV * (wheel_v[k] - dq)
-            for a in spring_act:
-                data.ctrl[a] = args.spring_ff
-            mujoco.mj_step(mj, data)
+            step_control(mj, data, action, leg_act, wheel_act, spring_act=spring_act)
             if tick % 10 == 0:
                 v.sync()
             tick += 1
