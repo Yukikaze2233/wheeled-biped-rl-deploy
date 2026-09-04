@@ -1,0 +1,105 @@
+<mujoco model="wheelbipe_V14_mjcf_aligned_urdf">
+  <compiler angle="radian"/>
+
+  <worldbody>
+  <geom name="floor" type="plane" size="10 10 0.1" friction="1.0"/>
+        <geom size="0.27 0.15 0.115" pos="0 0 -0.03" type="box" rgba="0.866667 0.866667 0.890196 1"/>
+      <body name="base_link" pos="0 0 0.30">
+      <freejoint name="floating_base"/>
+        <inertial pos="0.00272 0.0003 -0.01317" mass="15.301" fullinertia="0.2207473 0.2781394 0.3837124 -0.0018843 0.0097564 -0.0000157"/>
+      <body name="gimbal_yaw_link" pos="0 2.91038e-11 0.05495">
+      <inertial pos="-0.0372174 -0.0261124 0.0832093" quat="-0.0206868 0.842283 0.341689 0.41639" mass="1.53579" diaginertia="0.0102473 0.0078773 0.00456992"/>
+      <joint name="gimbal_yaw_joint"/>
+      <body name="gimbal_pitch_link" pos="-0.0190834 -0.0781947 0.18">
+        <inertial pos="0.019 0.02 0.026" quat="0.387825 0.694236 0.143434 0.589114" mass="2.444" diaginertia="0.0251913 0.0234487 0.0103265"/>
+        <joint name="gimbal_pitch_joint" axis="0.0426941 0.999088 0"/>
+        <geom size="0.23 0.11 0.09" type="box" rgba="0.847059 0.972549 0.780392 1"/>
+      </body>
+    </body>
+    <body name="left_front1_link" pos="0 0.1845 -2.38419e-08">
+      <inertial pos="0.0319413 0.00303813 -0.00504969" quat="0.444151 0.52462 0.550209 0.474104" mass="0.104902" diaginertia="0.000243003 0.000218691 3.12148e-05"/>
+      <joint name="left_front1_joint" range="-3.14 3.14" actuatorfrcrange="-40 40" axis="0 1 0"/>
+      <geom size="0.075 0.025 0.025" pos="0.05 0 0" type="box" rgba="0.866667 0.866667 0.890196 1"/>
+      <body name="left_front2_link" pos="0.112659 -0.00950009 0.0129657">
+        <inertial pos="-0.0592416 -0.00441124 -0.0323525" quat="0.608132 0.360799 0.360799 0.608132" mass="0.0393656" diaginertia="8.99709e-05 8.89177e-05 1.67563e-06"/>
+        <joint name="left_front2_joint" axis="0 1 0"/>
+        <body name="left_front3_link" pos="-0.10887 0.00649988 -0.0798999">
+          <inertial pos="-0.0790697 0.003 0.0650625" quat="0.291021 0.644443 0.644443 0.291021" mass="0.035715" diaginertia="0.000147976 0.00014543 2.76039e-06"/>
+          <joint name="left_front3_joint" axis="0 1 0"/>
+          <body name="left_front4_link" pos="-0.164991 -0.00650013 0.114102">
+            <inertial pos="-0.0482977 -0.00448784 0" quat="0.499786 0.499786 0.500214 0.500214" mass="0.0294239" diaginertia="3.94413e-05 3.85942e-05 1.31889e-06"/>
+            <joint name="left_front4_joint" axis="0 1 0"/>
+            <geom size="0.075 0.01 0.015" pos="-0.05 0 0" type="box" rgba="0.929412 0.929412 0.929412 1"/>
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="left_rear1_link" pos="0 0.174 -2.38419e-08">
+      <inertial pos="-0.0924068 -0.00509079 -0.000249942" quat="0.492996 0.50627 0.503536 0.497088" mass="0.289964" diaginertia="0.00167502 0.00156976 0.000112022"/>
+      <joint name="left_rear1_joint" range="-3.14 3.14" actuatorfrcrange="-40 40" axis="0 1 0"/>
+      <geom size="0.135 0.015 0.025" pos="-0.1 0 0" type="box" rgba="0.866667 0.866667 0.890196 1"/>
+      <body name="left_rear2_link" pos="-0.21 0.0144999 3.06637e-06">
+        <inertial pos="0.0989375 0.00771452 -0.0787794" quat="0.310209 0.633184 0.640741 0.303808" mass="0.286715" diaginertia="0.00246901 0.00238333 9.55545e-05"/>
+        <joint name="left_rear2_joint" range="-0.05 1.05" actuatorfrcrange="-40 40" axis="0 1 0"/>
+        <geom size="0.16 0.0075 0.025" pos="0.08 0.005 -0.065" quat="0.958244 0 0.285952 0" type="box" rgba="0.929412 0.929412 0.929412 1"/>
+        <body name="left_wheel_link" pos="0.216608 0.03355 -0.12483">
+          <inertial pos="-1.97308e-05 0.0106477 -2.60157e-05" quat="0.316567 0.632355 0.632174 0.316653" mass="0.365939" diaginertia="0.000613576 0.000318187 0.000318031"/>
+          <joint name="left_wheel_joint" actuatorfrcrange="-10 10" axis="0 1 0"/>
+          <geom size="0.06 0.0125" pos="0 0.012 0" quat="0.707106 0.707108 0 0" type="cylinder" rgba="0.298039 0.298039 0.298039 1"/>
+        </body>
+      </body>
+      <body name="left_spring1_link" pos="0.00235445 -0.00200007 -0.0449381">
+        <inertial pos="-0.0411116 0.00032883 0.00256147" quat="0.483146 0.514317 0.516304 0.48526" mass="0.0282731" diaginertia="1.50304e-05 1.49466e-05 3.42159e-07"/>
+        <joint name="left_spring1_joint" axis="0 1 0"/>
+        <body name="left_spring2_link" pos="-0.0329506 -0.00550007 0.00440263" quat="0.999516 0 0.0311075 0">
+          <inertial pos="0.0627039 0.00016644 0" quat="0.500205 0.500205 0.499795 0.499795" mass="0.0867952" diaginertia="8.95146e-05 8.93439e-05 2.25676e-06"/>
+          <joint name="left_spring2_joint" type="slide" range="-0.01 0.06" actuatorfrcrange="-1000 1000" axis="-1 0 0"/>
+        </body>
+      </body>
+    </body>
+    <body name="right_front1_link" pos="0 -0.1845 -2.38419e-08">
+      <inertial pos="0.0319413 -0.00303813 -0.00504969" quat="0.474104 0.550209 0.52462 0.444151" mass="0.104902" diaginertia="0.000243003 0.000218691 3.12148e-05"/>
+      <joint name="right_front1_joint" range="-3.14 3.14" actuatorfrcrange="-40 40" axis="0 1 0"/>
+      <geom size="0.075 0.025 0.025" pos="0.05 0 0" type="box" rgba="0.866667 0.866667 0.890196 1"/>
+      <body name="right_front2_link" pos="0.112659 0.00950007 0.0129657">
+        <inertial pos="-0.0592416 0.00441126 -0.0323525" quat="0.608132 0.360799 0.360799 0.608132" mass="0.0393656" diaginertia="8.99709e-05 8.89177e-05 1.67563e-06"/>
+        <joint name="right_front2_joint" axis="0 1 0"/>
+        <body name="right_front3_link" pos="-0.10887 -0.00649991 -0.0798999">
+          <inertial pos="-0.0790697 -0.00300001 0.0650625" quat="0.291021 0.644443 0.644443 0.291021" mass="0.035715" diaginertia="0.000147976 0.00014543 2.76039e-06"/>
+          <joint name="right_front3_joint" axis="0 1 0"/>
+          <body name="right_front4_link" pos="-0.164991 0.0065001 0.114102">
+            <inertial pos="-0.0482977 0.00448784 0" quat="0.500214 0.500214 0.499786 0.499786" mass="0.0294239" diaginertia="3.94413e-05 3.85942e-05 1.31889e-06"/>
+            <joint name="right_front4_joint" axis="0 1 0"/>
+            <geom size="0.075 0.01 0.015" pos="-0.05 0 0" type="box" rgba="0.929412 0.929412 0.929412 1"/>
+          </body>
+        </body>
+      </body>
+    </body>
+    <body name="right_rear1_link" pos="0 -0.174 -2.38419e-08">
+      <inertial pos="-0.0924068 0.00509077 -0.000249942" quat="0.497088 0.503536 0.50627 0.492996" mass="0.289964" diaginertia="0.00167502 0.00156976 0.000112022"/>
+      <joint name="right_rear1_joint" range="-3.14 3.14" actuatorfrcrange="-40 40" axis="0 1 0"/>
+      <geom size="0.135 0.015 0.025" pos="-0.1 0 0" type="box" rgba="0.866667 0.866667 0.890196 1"/>
+      <body name="right_rear2_link" pos="-0.21 -0.0144999 2.75494e-06">
+        <inertial pos="0.0989605 -0.00771453 -0.0787918" quat="0.30381 0.640764 0.633153 0.310223" mass="0.286715" diaginertia="0.00246901 0.00238331 9.55761e-05"/>
+        <joint name="right_rear2_joint" range="-0.05 1.05" actuatorfrcrange="-40 40" axis="0 1 0"/>
+        <geom size="0.16 0.0075 0.025" pos="0.08 -0.005 -0.065" quat="0.958244 0 0.285952 0" type="box" rgba="0.929412 0.929412 0.929412 1"/>
+        <body name="right_wheel_link" pos="0.216608 -0.0335499 -0.12483">
+          <inertial pos="-1.39538e-05 -0.0115298 -3.3351e-05" quat="0.390102 0.589717 0.589889 0.389983" mass="0.330449" diaginertia="0.000589141 0.000305857 0.000305701"/>
+          <joint name="right_wheel_joint" actuatorfrcrange="-10 10" axis="0 1 0"/>
+          <geom size="0.06 0.0125" pos="0 -0.012 0" quat="0.707106 0.707108 0 0" type="cylinder" rgba="0.298039 0.298039 0.298039 1"/>
+        </body>
+      </body>
+      <body name="right_spring1_link" pos="0.00235452 0.00195011 -0.0449384">
+        <inertial pos="-0.0411116 -0.000328822 0.00256146" quat="0.48526 0.516304 0.514317 0.483146" mass="0.0282731" diaginertia="1.50304e-05 1.49466e-05 3.42159e-07"/>
+        <joint name="right_spring1_joint" axis="0 1 0"/>
+        <body name="right_spring2_link" pos="-0.0329505 0.0055001 0.00440258" quat="0.999516 0 0.0311075 0">
+          <inertial pos="0.0627039 -0.000166441 0" quat="0.499795 0.499795 0.500205 0.500205" mass="0.0867952" diaginertia="8.95146e-05 8.93439e-05 2.25676e-06"/>
+          <joint name="right_spring2_joint" type="slide" range="-0.01 0.06" actuatorfrcrange="-1000 1000" axis="-1 0 0"/>
+        </body>
+      </body>
+    </body>
+        </body>
+  </worldbody>
+<actuator><motor name="left_front1_joint" joint="left_front1_joint" ctrlrange="-40 40" gear="1"/><motor name="right_front1_joint" joint="right_front1_joint" ctrlrange="-40 40" gear="1"/><motor name="left_rear1_joint" joint="left_rear1_joint" ctrlrange="-40 40" gear="1"/><motor name="right_rear1_joint" joint="right_rear1_joint" ctrlrange="-40 40" gear="1"/><motor name="left_wheel_joint" joint="left_wheel_joint" ctrlrange="-5 5" gear="1"/><motor name="right_wheel_joint" joint="right_wheel_joint" ctrlrange="-5 5" gear="1"/><motor name="gimbal_yaw_joint_ctrl" joint="gimbal_yaw_joint" ctrlrange="-2 2" gear="1"/>
+</actuator>
+</mujoco>

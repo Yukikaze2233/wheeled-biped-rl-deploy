@@ -21,7 +21,7 @@ from mujoco_sim2sim import (  # noqa: E402
 )
 
 
-def run(mj, data, sess, i_name, vx, wz, seconds, spring_ff=0.0):
+def run(mj, data, sess, i_name, vx, wz, seconds, spring_ff=0.0, mode_flags=None):
     leg_act, wheel_act = actuator_ids_of(mj)
     spring_act = spring_binding(mj)
     last_action = np.zeros(6, np.float32)
@@ -32,6 +32,8 @@ def run(mj, data, sess, i_name, vx, wz, seconds, spring_ff=0.0):
     for tick in range(n):
         if tick % STEPS_PER_POLICY == 0:
             obs = build_obs(mj, data, cmd, 0.22, last_action)
+            if mode_flags is not None:
+                obs[28:35] = mode_flags
             action = sess.run(None, {i_name: obs[None]})[0][0]
             last_action = action.copy()
         step_control(mj, data, action, leg_act, wheel_act,
@@ -46,7 +48,7 @@ def quat_yaw(q):
     return math.atan2(2 * (w * z + x * y), 1 - 2 * (y * y + z * z))
 
 
-def scenario(mj_path, policy, name, vx, wz, tip_over=False, spring_ff=0.0):
+def scenario(mj_path, policy, name, vx, wz, tip_over=False, spring_ff=0.0, mode_flags=None):
     import onnxruntime as ort
     mj = mujoco.MjModel.from_xml_path(mj_path)
     data = mujoco.MjData(mj)
@@ -59,7 +61,7 @@ def scenario(mj_path, policy, name, vx, wz, tip_over=False, spring_ff=0.0):
     yaw0 = quat_yaw(data.qpos[3:7])
 
     sess = ort.InferenceSession(policy, providers=["CPUExecutionProvider"])
-    run(mj, data, sess, sess.get_inputs()[0].name, vx, wz, 4.0, spring_ff=spring_ff)
+    run(mj, data, sess, sess.get_inputs()[0].name, vx, wz, 4.0, spring_ff=spring_ff, mode_flags=mode_flags)
 
     x, y, z = data.qpos[:3]
     yaw = quat_yaw(data.qpos[3:7])
