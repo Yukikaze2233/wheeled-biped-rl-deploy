@@ -86,9 +86,12 @@ def step_control(mj, data, action, leg_act, wheel_act, spring_act=None,
     leg_t = action[:4] * 0.5
     wheel_v = np.clip(action[4:] * 10.0, -30, 30)
     if leg_models is None:
-        leg_models = [ActuatorModel() for _ in LEG_JOINTS]
-        step_control.leg_models = leg_models
-    leg_models = getattr(step_control, "leg_models", leg_models)
+        # per-model state keyed by the MjModel id (no cross-sim leakage)
+        store = getattr(step_control, "_stores", {})
+        key = id(mj)
+        if key not in store:
+            store[key] = [ActuatorModel() for _ in LEG_JOINTS]
+        leg_models = store[key]
     for _ in range(PHYSICS_STEPS_PER_TICK):
         for k, jname in enumerate(LEG_JOINTS):
             j = mj.joint(jname).id
