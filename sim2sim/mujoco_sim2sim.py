@@ -40,6 +40,18 @@ WHEEL_JOINTS = ("left_wheel_joint", "right_wheel_joint")
 DEFAULT_LEG_POS = np.zeros(4)
 
 
+def actuator_ids_of(mj: mujoco.MjModel) -> tuple[list[int], list[int]]:
+    """(leg_act_ids, wheel_act_ids) by contract joint name; MJCFs name
+    actuators "{joint}_ctrl" and order them per-side, NOT per contract."""
+    def act_id(joint):
+        for cand in (f"{joint}_ctrl", joint):
+            a = mujoco.mj_name2id(mj, mujoco.mjtObj.mjOBJ_ACTUATOR, cand)
+            if a >= 0:
+                return a
+        raise KeyError(f"no actuator for {joint}")
+    return [act_id(j) for j in LEG_JOINTS], [act_id(j) for j in WHEEL_JOINTS]
+
+
 def _root_body_id(mj: mujoco.MjModel) -> int:
     """Body attached to the free joint (root link name varies per model)."""
     for j in range(mj.njnt):

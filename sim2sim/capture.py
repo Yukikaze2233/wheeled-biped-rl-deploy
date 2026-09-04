@@ -46,16 +46,8 @@ def main():
     sess = ort.InferenceSession(args.policy, providers=["CPUExecutionProvider"])
     i_name = sess.get_inputs()[0].name
 
-    # actuator ids by contract-joint name (MJCFs name them "{joint}_ctrl")
-    def act_id(joint):
-        for cand in (f"{joint}_ctrl", joint):
-            a = mujoco.mj_name2id(mj, mujoco.mjtObj.mjOBJ_ACTUATOR, cand)
-            if a >= 0:
-                return a
-        raise KeyError(f"no actuator for {joint}")
-
-    leg_act = [act_id(j) for j in LEG_JOINTS]
-    wheel_act = [act_id(j) for j in WHEEL_JOINTS]
+    from mujoco_sim2sim import actuator_ids_of
+    leg_act, wheel_act = actuator_ids_of(mj)
 
     cmd = np.array([args.vx, 0.0, 0.0], np.float32)
     last_action = np.zeros(6, np.float32)
