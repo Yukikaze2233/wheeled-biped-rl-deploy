@@ -32,6 +32,8 @@ def main():
     p.add_argument("--model", required=True)
     p.add_argument("--policy", required=True)
     p.add_argument("--spring-ff", type=float, default=0.0)
+    p.add_argument("--no-follow", action="store_true",
+                   help="disable camera look-at tracking (keep free camera)")
     args = p.parse_args()
 
     import onnxruntime as ort
