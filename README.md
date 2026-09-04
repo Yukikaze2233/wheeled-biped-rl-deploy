@@ -62,7 +62,9 @@ ros2/src/
 | [docs/sim2real.md](docs/sim2real.md) | 上真机核对清单 + real2sim 辨识 + 逆向排查表 |
 | [docs/ros2_architecture.md](docs/ros2_architecture.md) | 三层结构、sim/real 切换、扩展路径 |
 | [docs/testing.md](docs/testing.md) | 两仓验证体系与"改动→必跑"对照表 |
+| [docs/environment.md](docs/environment.md) | 部署环境三档搭建(A 轻量 sim2sim / B ROS2 / C 真机) |
 | 训练仓 [docs/project_tree.md](../isaac_wheeled_rl_train/docs/project_tree.md) | 两仓库完整架构层级树(文件级) |
+| 训练仓 [docs/server_setup.md](../isaac_wheeled_rl_train/docs/server_setup.md) | 训练服务器环境搭建 |
 
 ## 快速开始
 
