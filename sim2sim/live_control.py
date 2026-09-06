@@ -7,6 +7,7 @@ The robot auto-resets when it falls (base below threshold or tilted over).
 """
 import argparse
 import json
+import os
 import sys
 
 import glfw as _glfw
@@ -16,7 +17,7 @@ import onnxruntime as ort
 import mujoco
 from mujoco import Renderer
 
-ROOT = "/home/yukikaze/Documents/workspace/robot_rl"
+ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # robot_rl/
 W, H = 960, 540  # requested window size (framebuffer may differ under HiDPI)
 
 
@@ -36,7 +37,7 @@ def main():
         height_cmd = 0.48
         defaults = json.load(open(f"{ROOT}/isaac_wheeled_rl_train/assets/urdf_v33/defaults.json"))
         default_pose = np.array([defaults["default_joint_pos"][n] for n in legs])
-        delays = (0, 0)
+        delays = (4, 3)  # deploy parity: obs 4 / act 3 policy steps (ROS2 controller)
         vx_step, wz_step = 0.1, 0.4
         vx_max = 1.0
         fall_z = 0.15
