@@ -17,7 +17,7 @@ import mujoco
 from mujoco import Renderer
 
 ROOT = "/home/yukikaze/Documents/workspace/robot_rl"
-W, H = 1280, 720
+W, H = 960, 540  # requested window size (framebuffer may differ under HiDPI)
 
 
 def main():
@@ -94,9 +94,14 @@ def main():
 
     # window + offscreen renderer + tracking camera
     _glfw.init()
+    _glfw.window_hint(_glfw.RESIZABLE, 1)
     window = _glfw.create_window(W, H, "wheeled-biped RL live control", None, None)
     _glfw.make_context_current(window)
-    renderer = Renderer(mj, H, W)
+    # Fixed-size renderer matching the scene's offscreen framebuffer
+    # (offwidth/offheight 1280x720). HiDPI framebuffers larger than that are
+    # handled by glPixelZoom scaling, NOT by a bigger renderer (which would
+    # exceed the offscreen limits and crash).
+    renderer_ref = [Renderer(mj, 720, 1280)]
     cam = mujoco.MjvCamera()
     cam.type = mujoco.mjtCamera.mjCAMERA_TRACKING
     cam.trackbodyid = 1
@@ -195,7 +200,7 @@ def main():
                     up = np.array([0.0, 0.0, 1.0])
                     cam.lookat[:] += scale * (-dx * right + dy * up)
                 drag["x"], drag["y"] = cx, cy
-            renderer.update_scene(d, camera=cam)
+            renderer_ref[0].update_scene(d, camera=cam)
             # command-direction arrow above the robot (green), like the
             # official Isaac Lab goal_vel_visualizer
             if abs(vx_cmd) > 0.05:
@@ -209,20 +214,24 @@ def main():
                     x = np.array([1.0, 0.0, 0.0])
                 x /= np.linalg.norm(x)
                 y = np.cross(z, x)
-                idx = renderer.scene.ngeom
-                renderer.scene.ngeom = idx + 1
-                g = renderer.scene.geoms[idx]
+                idx = renderer_ref[0].scene.ngeom
+                renderer_ref[0].scene.ngeom = idx + 1
+                g = renderer_ref[0].scene.geoms[idx]
                 g.type = mujoco.mjtGeom.mjGEOM_ARROW
                 g.size[:] = [0.02, 0.02, 0.15 + 0.25 * abs(vx_cmd)]
                 g.pos[:] = base_pos + [0, 0, 0.30]
                 g.mat[:] = np.column_stack([x, y, z])
                 g.rgba[:] = [0.2, 0.95, 0.2, 1.0]
-            rgb = renderer.render()
+            rgb = renderer_ref[0].render()
             _glfw.make_context_current(window)  # renderer owns a private GL context
+            fb_w, fb_h = _glfw.get_framebuffer_size(window)
+            gl.glViewport(0, 0, fb_w, fb_h)
             gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-            # glDrawPixels origin is bottom-left; MuJoCo frames are top-down:
-            # flip vertically so the window is NOT upside-down.
-            gl.glDrawPixels(W, H, gl.GL_RGB, gl.GL_UNSIGNED_BYTE,
+            # scale the 1280x720 frame to the (HiDPI) framebuffer; pixel zoom
+            # applies to glDrawPixels. Flip vertically: glDrawPixels origin is
+            # bottom-left while MuJoCo frames are top-down.
+            gl.glPixelZoom(fb_w / 1280.0, fb_h / 720.0)
+            gl.glDrawPixels(1280, 720, gl.GL_RGB, gl.GL_UNSIGNED_BYTE,
                             np.ascontiguousarray(rgb[::-1]))
             _glfw.swap_buffers(window)
             _glfw.poll_events()
