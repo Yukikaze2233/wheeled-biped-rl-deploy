@@ -35,8 +35,10 @@ def main():
     p.add_argument("--spring-ff", type=float, default=0.0)
     p.add_argument("--no-follow", action="store_true",
                    help="disable camera look-at tracking (keep free camera)")
-    p.add_argument("--height", type=float, default=0.38,
-                   help="spawn height (training init pose)")
+    p.add_argument("--height", type=float, default=0.40,
+                   help="spawn height")
+    p.add_argument("--stand-pose", type=float, default=0.4,
+                   help="PREPARE leg angle magnitude (front +, rear -)")
     p.add_argument("--prepare-s", type=float, default=1.0,
                    help="PREPARE phase: legs PD-hold at 0 rad before RL engages")
     args = p.parse_args()
@@ -69,8 +71,7 @@ def main():
         elif keycode == ord(' '):
             cmd.vx = cmd.wz = 0.0
         elif keycode == ord('r') or keycode == ord('R'):
-            data.qpos[:] = mj.key_qpos[0].copy() if mj.nkey else data.qpos
-            data.qpos[2] = 0.30
+            data.qpos[2] = args.height
             data.qvel[:] = 0
             mujoco.mj_forward(mj, data)
         print(f"cmd: vx={cmd.vx:+.2f} m/s  wz={cmd.wz:+.2f} rad/s")
@@ -83,13 +84,16 @@ def main():
         last_action = action.copy()
 
     prepare_ticks = int(args.prepare_s * 500)
+    sp = args.stand_pose
 
     def prepare_control():
-        """official PREPARE: legs PD at default pose (Kp80/Kd2), wheels free."""
+        """PREPARE: legs PD to the extended stand pose, wheels free."""
+        pose = {"left_front1_joint": +sp, "left_rear1_joint": -sp,
+                "right_front1_joint": +sp, "right_rear1_joint": -sp}
         for k, jname in enumerate(LEG_JOINTS):
             j = mj.joint(jname).id
             q, dq = data.qpos[mj.jnt_qposadr[j]], data.qvel[mj.jnt_dofadr[j]]
-            data.ctrl[leg_act[k]] = 80.0 * (0.0 - q) - 2.0 * dq
+            data.ctrl[leg_act[k]] = 100.0 * (pose[jname] - q) - 3.0 * dq
         for a in wheel_act:
             data.ctrl[a] = 0.0
 
@@ -117,7 +121,7 @@ def main():
                 v.sync()
             tick += 1
             if data.qpos[2] < 0.05:
-                data.qpos[2] = 0.30
+                data.qpos[2] = args.height
                 data.qvel[:] = 0
                 mujoco.mj_forward(mj, data)
 
