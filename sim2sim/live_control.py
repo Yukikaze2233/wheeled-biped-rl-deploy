@@ -193,7 +193,10 @@ def main():
             rgb = renderer.render()
             _glfw.make_context_current(window)  # renderer owns a private GL context
             gl.glClear(gl.GL_COLOR_BUFFER_BIT)
-            gl.glDrawPixels(W, H, gl.GL_RGB, gl.GL_UNSIGNED_BYTE, rgb)
+            # glDrawPixels origin is bottom-left; MuJoCo frames are top-down:
+            # flip vertically so the window is NOT upside-down.
+            gl.glDrawPixels(W, H, gl.GL_RGB, gl.GL_UNSIGNED_BYTE,
+                            np.ascontiguousarray(rgb[::-1]))
             _glfw.swap_buffers(window)
             _glfw.poll_events()
             if tick % 50 == 0:
