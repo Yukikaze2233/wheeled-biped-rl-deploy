@@ -30,18 +30,20 @@ PHYSICS_STEPS_PER_TICK = 2
 
 # torque saturation (CONTRACT.md section 3; unbounded PD oscillates)
 LEG_TORQUE_LIMIT = 40.0
-WHEEL_TORQUE_LIMIT = 9.99
-# gas spring: official xacro values (force falls 650N->450N across travel,
-# i.e. deepest compression at q_min pushes hardest) + viscous damping
-SPRING_Q_MIN, SPRING_Q_MAX = -0.005, 0.07
-SPRING_FORCE_AT_QMIN, SPRING_FORCE_AT_QMAX = 650.0, 450.0
-SPRING_VISCOUS_DAMPING = 500.0
+WHEEL_TORQUE_LIMIT = 5.0
+# gas spring: authoritative training cfg (pretrained env.yaml spring_settings):
+# mode linear, spring_offset 0.06076, linear_up 600 @ full compression,
+# linear_down 400 @ free length, linear_length 0.07, damping False.
+SPRING_OFFSET = 0.06076
+SPRING_TRAVEL = 0.07
+SPRING_FORCE_FREE, SPRING_FORCE_COMPRESSED = 400.0, 600.0
+SPRING_VISCOUS_DAMPING = 0.0  # training used damping=False; enable for real2sim tuning
 
 
 def gas_spring_force(mj, data, spring_qadr, spring_vel_adr) -> float:
     q = data.qpos[spring_qadr]
-    ratio = (min(max(q, SPRING_Q_MIN), SPRING_Q_MAX) - SPRING_Q_MIN) / (SPRING_Q_MAX - SPRING_Q_MIN)
-    spring_force = SPRING_FORCE_AT_QMIN + (SPRING_FORCE_AT_QMAX - SPRING_FORCE_AT_QMIN) * ratio
+    compression = min(max(SPRING_OFFSET - q, 0.0), SPRING_TRAVEL)
+    spring_force = SPRING_FORCE_FREE + (SPRING_FORCE_COMPRESSED - SPRING_FORCE_FREE) / SPRING_TRAVEL * compression
     damping = -SPRING_VISCOUS_DAMPING * data.qvel[spring_vel_adr]
     return spring_force + damping
 
@@ -84,7 +86,7 @@ def step_control(mj, data, action, leg_act, wheel_act, spring_act=None,
     """One 2ms control tick with official semantics: PD per physics substep,
     torque saturation, gas-spring model force, leg-motor second-order model."""
     leg_t = action[:4] * 0.5
-    wheel_v = np.clip(action[4:] * 10.0, -30, 30)
+    wheel_v = np.clip(action[4:] * WHEEL_ACTION_SCALE, -MAX_WHEEL_VEL, MAX_WHEEL_VEL)
     if leg_models is None:
         # per-model state keyed by the MjModel id (no cross-sim leakage)
         store = getattr(step_control, "_stores", {})
@@ -113,12 +115,18 @@ SCALE_ANG_VEL = 0.5
 SCALE_HEIGHT_CMD = 5.0
 SCALE_JOINT_VEL = 0.1
 LEG_ACTION_SCALE = 0.5
+# wheel velocity mode (use_wheel_vel_control=True): env.py overrides
+# wheel_action_scale = wheel_vel_action_scale = 10.0 and
+# max_wheel_vel = 100.0 * 1.5 = 150.0. Authoritative from the training code.
 WHEEL_ACTION_SCALE = 10.0
-MAX_WHEEL_VEL = 30.0
+MAX_WHEEL_VEL = 150.0
 CLIP_OBS = 100.0
 LEG_KP, LEG_KD = 60.0, 2.0
 WHEEL_KV = 0.2  # velocity servo torque per rad/s error
-LEG_JOINTS = ("left_front1_joint", "left_rear1_joint", "right_front1_joint", "right_rear1_joint")
+# Authoritative order from the official training cfg (legs_act joint_names_expr =
+# [".*_rear1_joint", ".*_front1_joint"] -> rear leg first). Verified against
+# pretrained env.yaml: action dims = [left_rear, right_rear, left_front, right_front].
+LEG_JOINTS = ("left_rear1_joint", "right_rear1_joint", "left_front1_joint", "right_front1_joint")
 WHEEL_JOINTS = ("left_wheel_joint", "right_wheel_joint")
 DEFAULT_LEG_POS = np.zeros(4)
 
@@ -201,6 +209,7 @@ def main():
     p.add_argument("--vx", type=float, default=0.0)
     p.add_argument("--wz", type=float, default=0.0)
     p.add_argument("--height-cmd", type=float, default=0.22)
+    p.add_argument("--init-z", type=float, default=0.22, help="initial base height (training uses absolute height; default standing 0.22)")
     p.add_argument("--obs-delay-ticks", type=int, default=0, help="delay in 500 Hz ticks")
     p.add_argument("--action-delay-ticks", type=int, default=0)
     p.add_argument("--noise-std", type=float, default=0.0, help="obs gaussian noise std")
@@ -210,9 +219,17 @@ def main():
 
     mj = mujoco.MjModel.from_xml_path(args.model)
     data = mujoco.MjData(mj)
+    # absolute-height semantics (use_absolute_height=True in training):
+    # the height command is the base origin z in the world frame.
+    if mj.jnt_type[0] == mujoco.mjtJoint.mjJNT_FREE:
+        data.qpos[2] = args.init_z
+    mujoco.mj_forward(mj, data)
     if any(n not in [mujoco.mj_id2name(mj, mujoco.mjtObj.mjOBJ_JOINT, j) for j in range(mj.njnt)]
            for n in LEG_JOINTS + WHEEL_JOINTS):
         print("note: model lacks contract joint names — obs/action mapping will fail")
+    leg_act, wheel_act = actuator_ids_of(mj)
+    spring_act = spring_binding(mj)
+    print(f"actuators: legs={leg_act} wheels={wheel_act} springs={[a for (_, a) in spring_act]}")
 
     sess = ort.InferenceSession(args.policy, providers=["CPUExecutionProvider"])
     i_name = sess.get_inputs()[0].name
@@ -242,17 +259,26 @@ def main():
         leg_t = DEFAULT_LEG_POS + LEG_ACTION_SCALE * applied[:4]
         wheel_v = np.clip(WHEEL_ACTION_SCALE * applied[4:], -MAX_WHEEL_VEL, MAX_WHEEL_VEL)
 
-        # 500 Hz software PD ("hardware_pd_vel" semantics)
-        for k, jname in enumerate(LEG_JOINTS):
-            j = mj.joint(jname).id
-            q = data.qpos[mj.jnt_qposadr[j]]
-            dq = data.qvel[mj.jnt_dofadr[j]]
-            data.ctrl[k] = LEG_KP * (leg_t[k] - q) - LEG_KD * dq
-        for k, jname in enumerate(WHEEL_JOINTS):
-            dq = data.qvel[mj.jnt_dofadr[mj.joint(jname).id]]
-            data.ctrl[4 + k] = WHEEL_KV * (wheel_v[k] - dq)
+        # 500 Hz software PD ("hardware_pd_vel" semantics), actuator ids resolved
+        # BY NAME — official MJCF actuator order is not contract order.
+        # 2 physics substeps per 2 ms tick (timestep 0.001); PD recomputed every
+        # substep to mirror the official write() semantics.
+        for _ in range(PHYSICS_STEPS_PER_TICK):
+            for k, jname in enumerate(LEG_JOINTS):
+                j = mj.joint(jname).id
+                q = data.qpos[mj.jnt_qposadr[j]]
+                dq = data.qvel[mj.jnt_dofadr[j]]
+                data.ctrl[leg_act[k]] = np.clip(LEG_KP * (leg_t[k] - q) - LEG_KD * dq,
+                                                -LEG_TORQUE_LIMIT, LEG_TORQUE_LIMIT)
+            for k, jname in enumerate(WHEEL_JOINTS):
+                dq = data.qvel[mj.jnt_dofadr[mj.joint(jname).id]]
+                data.ctrl[wheel_act[k]] = np.clip(WHEEL_KV * (wheel_v[k] - dq),
+                                                  -WHEEL_TORQUE_LIMIT, WHEEL_TORQUE_LIMIT)
+            # gas springs: per-step force (authoritative linear curve, no damping)
+            for (qadr, vadr), act in spring_act:
+                data.ctrl[act] = gas_spring_force(mj, data, qadr, vadr)
 
-        mujoco.mj_step(mj, data)
+            mujoco.mj_step(mj, data)
 
         if data.qpos[2] < 0.05:
             print(f"[t={tick * CTRL_DT:.2f}s] base below 0.05 m — episode ended")

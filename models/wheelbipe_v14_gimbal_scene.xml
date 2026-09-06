@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Sim2sim scene wrapper: official closed-loop V14 model (with gimbal) +
+     ground plane. Matches the official scene.xml (timestep 0.001, Euler,
+     Newton solver, floor friction 1 0.01 0.01). -->
+<mujoco model="wheelbipe_v14_gimbal_scene">
+  <include file="wheelbipe_v14_gimbal_official.xml" />
+  <option timestep="0.001" integrator="Euler" solver="Newton" iterations="100" tolerance="1e-8" />
+  <worldbody>
+    <geom name="floor" size="0 0 0.05" type="plane" friction="1 0.01 0.01" />
+  </worldbody>
+</mujoco>

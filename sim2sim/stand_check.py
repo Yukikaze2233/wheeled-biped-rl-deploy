@@ -54,8 +54,9 @@ def main():
             j = mj.joint(jn).id
             q, dq = data.qpos[mj.jnt_qposadr[j]], data.qvel[mj.jnt_dofadr[j]]
             data.ctrl[leg_act[k]] = 80.0 * (0.0 - q) - 2.0 * dq
-        for a in wheel_act:
-            data.ctrl[a] = 0.0
+        for k, jn in enumerate(("left_wheel_joint", "right_wheel_joint")):
+            dq = data.qvel[mj.jnt_dofadr[mj.joint(jn).id]]
+            data.ctrl[wheel_act[k]] = float(np.clip(2.0 * (0.0 - dq), -9.99, 9.99))
         spring_apply()
         mujoco.mj_step(mj, data)
 

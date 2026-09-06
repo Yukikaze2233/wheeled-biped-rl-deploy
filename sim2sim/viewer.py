@@ -94,8 +94,10 @@ def main():
             j = mj.joint(jname).id
             q, dq = data.qpos[mj.jnt_qposadr[j]], data.qvel[mj.jnt_dofadr[j]]
             data.ctrl[leg_act[k]] = 100.0 * (pose[jname] - q) - 3.0 * dq
-        for a in wheel_act:
-            data.ctrl[a] = 0.0
+        for k, jn in enumerate(WHEEL_JOINTS):
+            j = mj.joint(jn).id
+            dq = data.qvel[mj.jnt_dofadr[j]]
+            data.ctrl[wheel_act[k]] = float(np.clip(2.0 * (0.0 - dq), -9.99, 9.99))
 
     with mj_viewer.launch_passive(mj, data, key_callback=key_cb) as v:
         tick = 0
