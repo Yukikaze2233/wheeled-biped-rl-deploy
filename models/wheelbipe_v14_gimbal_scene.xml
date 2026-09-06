@@ -5,7 +5,15 @@
 <mujoco model="wheelbipe_v14_gimbal_scene">
   <include file="wheelbipe_v14_gimbal_official.xml" />
   <option timestep="0.001" integrator="Euler" solver="Newton" iterations="100" tolerance="1e-8" />
+  <visual>
+    <global offwidth="1280" offheight="720"/>
+  </visual>
+  <asset>
+    <texture type="2d" name="gridtex" builtin="checker" mark="edge" width="512" height="512"
+             rgb1="0.12 0.12 0.12" rgb2="0.88 0.88 0.88"/>
+    <material name="gridmat" texture="gridtex" texrepeat="10 10" reflectance="0.1"/>
+  </asset>
   <worldbody>
-    <geom name="floor" size="0 0 0.05" type="plane" friction="1 0.01 0.01" />
+    <geom name="floor" size="0 0 0.05" type="plane" material="gridmat" friction="1 0.01 0.01" />
   </worldbody>
 </mujoco>
