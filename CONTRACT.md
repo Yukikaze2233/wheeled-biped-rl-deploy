@@ -8,6 +8,27 @@
 (官方训练 dump)与 agent_tasks/.../wheelbipe25_v3/env.py 的代码语义为唯一权威,
 已在 MuJoCo sim2sim 中按此合同跑通官方预训练 ONNX(sim2sim/mujoco_sim2sim.py)。
 
+## 0. 机器人变体(V14 / V3.3)
+
+同一 35D→6D 合同适用于两台车,差异只在**关节名、默认位、执行器常数与弹簧**:
+
+| 项 | V14(华南虎参考,含云台) | V3.3(自有串联腿,纯底盘) |
+| --- | --- | --- |
+| 腿关节(obs 10–13 / act 0–3 顺序) | [左后, 右后, 左前, 右前] (`*_rear1_joint`, `*_front1_joint`) | [L_joint1, L_joint2, R_joint1, R_joint2](髋,膝,髋,膝) |
+| 轮关节(obs 20–21 / act 4–5) | left/right_wheel_joint | L_joint3, R_joint3 |
+| 默认腿位(default_dof_pos) | 全 0 | [0.8702, 1.1311, −0.8702, −1.0844] rad(assets/urdf_v33/defaults.json,IK 站姿 H=0.48) |
+| 气弹簧 | 有(400–600N 线性曲线,见第 3 节) | **无**(sim2sim 用 `--no-springs`) |
+| 轮速伺服增益 | 0.2 Nm/(rad/s)(官方训练值) | **1.0 Nm/(rad/s)**(V3.3 训练值;KV=2.0 变体待训练结果定案,sim2sim 用 `--wheel-kv`) |
+| 高度指令语义 | 绝对底座高度,默认 0.22 m | 绝对底座高度,默认 **0.48 m** |
+| 训练/sim2sim 延迟 | obs 80ms / act 60ms(官方训练常开) | 当前训练 0 延迟(待加入随机化后对齐) |
+| 云台 | yaw 阻尼自由 + pitch 锁零(任务级,非策略) | 无(云台版将沿用 V14 的处理方式) |
+| 固件映射 | — | R_joint2 ↔ 固件 R_jonit2(索引 [1,2,3,4,5,6] = [L1,L2,L3,R1,R2,R3]) |
+
+训练/仿真文件:
+- V3.3 资产: `isaac_wheeled_rl_train/assets/urdf_v33/`(URDF + MJCF + defaults.json)
+- V3.3 训练: `isaac_wheeled_rl_train/tools/train_mujoco_v33.py`(MuJoCo CPU PPO,与部署同合同)/ Isaac Lab 任务 `WheeledBiped-V33-Flat-v0`(GPU 就绪)
+- V3.3 仿真模型: `models/urdf_v3.3_scene.xml`(sim2sim 与实时窗口共用)
+
 ## 1. 模型 I/O
 
 | 项目 | 值 |
