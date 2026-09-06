@@ -104,6 +104,19 @@ def main():
     cam.distance = 1.6
     cam.azimuth = 160.0
     cam.elevation = -18.0
+    # mouse interaction: left-drag orbit, right-drag pan, scroll zoom
+    drag = {"button": -1, "x": 0.0, "y": 0.0}
+
+    def _on_mouse_button(w, btn, act, mod):
+        if act == _glfw.PRESS:
+            drag["button"] = btn
+            drag["x"], drag["y"] = _glfw.get_cursor_pos(w)
+        else:
+            drag["button"] = -1
+
+    _glfw.set_mouse_button_callback(window, _on_mouse_button)
+    _glfw.set_scroll_callback(window, lambda w, dx, dy: setattr(
+        cam, "distance", max(0.3, cam.distance * (1.0 + dy * 0.08))))
 
     tick = 0
     title_t = 0.0
@@ -168,6 +181,20 @@ def main():
             action[:] = 0
 
         if tick % 5 == 0:
+            # apply mouse motion (accumulated via callbacks in drag dict)
+            if drag["button"] >= 0:
+                cx, cy = _glfw.get_cursor_pos(window)
+                dx, dy = cx - drag["x"], cy - drag["y"]
+                if drag["button"] == _glfw.MOUSE_BUTTON_LEFT:
+                    cam.azimuth -= 0.4 * dx
+                    cam.elevation = float(np.clip(cam.elevation - 0.3 * dy, -80.0, 80.0))
+                elif drag["button"] == _glfw.MOUSE_BUTTON_RIGHT:
+                    scale = cam.distance / 500.0
+                    right = np.array([np.cos(np.radians(cam.azimuth + 90.0)),
+                                      np.sin(np.radians(cam.azimuth + 90.0)), 0.0])
+                    up = np.array([0.0, 0.0, 1.0])
+                    cam.lookat[:] += scale * (-dx * right + dy * up)
+                drag["x"], drag["y"] = cx, cy
             renderer.update_scene(d, camera=cam)
             # command-direction arrow above the robot (green), like the
             # official Isaac Lab goal_vel_visualizer
