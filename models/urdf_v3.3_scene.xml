@@ -1,0 +1,11 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!-- Sim2sim scene for the own serial-leg robot (urdf_V3.3_fix).
+     timestep 0.001 -> the sim2sim driver steps 2 substeps per 500 Hz tick.
+     No gas springs: serial legs, 4 leg joints + 2 wheel joints. -->
+<mujoco model="urdf_v3.3_scene">
+  <include file="urdf_v3.3_rl.xml" />
+  <option timestep="0.001" integrator="Euler" solver="Newton" iterations="100" tolerance="1e-8" />
+  <worldbody>
+    <geom name="floor" size="0 0 0.05" type="plane" friction="1 0.01 0.01" />
+  </worldbody>
+</mujoco>

@@ -51,6 +51,7 @@ public:
 private:
   // model path from ros2_control yaml: <hardware><param key="mjcf_path">
   std::string mjcf_path_;
+  double wheel_kv_ = kWheelKv;  // overridable via yaml param wheel_kv (V3.3 = 1.0)
 
   // per-joint mirrors of the ros2_control interfaces (contract joint order)
   std::vector<std::string> joint_names_;
@@ -66,7 +67,7 @@ private:
   static constexpr double kLegKp = 60.0;
   static constexpr double kLegKd = 2.0;
   static constexpr double kLegTorqueLimit = 40.0;
-  static constexpr double kWheelKv = 0.2;
+  static constexpr double kWheelKv = 0.2;  // V14 official; V3.3 uses 1.0 (yaml param wheel_kv)
   static constexpr double kWheelTorqueLimit = 5.0;
   // gas spring (official spring_settings, linear mode, no damping)
   static constexpr double kSpringOffset = 0.06076;

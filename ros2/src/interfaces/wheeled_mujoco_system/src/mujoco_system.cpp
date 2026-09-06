@@ -21,6 +21,9 @@ hardware_interface::CallbackReturn WheeledMujocoSystem::on_init(
   mjcf_path_ = info_.hardware_parameters.count("mjcf_path")
                  ? info_.hardware_parameters.at("mjcf_path")
                  : "";
+  if (info_.hardware_parameters.count("wheel_kv")) {
+    wheel_kv_ = std::stod(info_.hardware_parameters.at("wheel_kv"));
+  }
 
   joint_names_.clear();
   for (const auto & joint : info_.joints) {
@@ -177,7 +180,7 @@ hardware_interface::return_type WheeledMujocoSystem::write(
     for (size_t i = 0; i < wheel_joint_ids_.size(); ++i) {
       const int id = wheel_joint_ids_[i];
       const double dq = data_->qvel[model_->jnt_dofadr[id]];
-      double tau = kWheelKv * (velocity_commands_[i] - dq);
+      double tau = wheel_kv_ * (velocity_commands_[i] - dq);
       tau = std::clamp(tau, -kWheelTorqueLimit, kWheelTorqueLimit);
       const int act = wheel_act_ids_[i];
       if (act >= 0) data_->ctrl[act] = tau;

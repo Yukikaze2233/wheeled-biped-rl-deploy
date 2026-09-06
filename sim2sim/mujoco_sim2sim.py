@@ -131,7 +131,8 @@ WHEEL_JOINTS = ("left_wheel_joint", "right_wheel_joint")
 DEFAULT_LEG_POS = np.zeros(4)
 
 
-def actuator_ids_of(mj: mujoco.MjModel) -> tuple[list[int], list[int]]:
+def actuator_ids_of(mj: mujoco.MjModel, leg_names=LEG_JOINTS,
+                     wheel_names=WHEEL_JOINTS) -> tuple[list[int], list[int]]:
     """(leg_act_ids, wheel_act_ids) by contract joint name; MJCFs name
     actuators "{joint}_ctrl" and order them per-side, NOT per contract."""
     def act_id(joint):
@@ -140,7 +141,7 @@ def actuator_ids_of(mj: mujoco.MjModel) -> tuple[list[int], list[int]]:
             if a >= 0:
                 return a
         raise KeyError(f"no actuator for {joint}")
-    return [act_id(j) for j in LEG_JOINTS], [act_id(j) for j in WHEEL_JOINTS]
+    return [act_id(j) for j in leg_names], [act_id(j) for j in wheel_names]
 
 
 def _root_body_id(mj: mujoco.MjModel) -> int:
@@ -152,8 +153,12 @@ def _root_body_id(mj: mujoco.MjModel) -> int:
 
 
 def build_obs(mj: mujoco.MjModel, data: mujoco.MjData, cmd: np.ndarray,
-              height_cmd: float, last_action: np.ndarray) -> np.ndarray:
+              height_cmd: float, last_action: np.ndarray,
+              leg_names=LEG_JOINTS, wheel_names=WHEEL_JOINTS,
+              default_leg_pos=None) -> np.ndarray:
     """Assemble the 35D observation per CONTRACT.md section 2."""
+    if default_leg_pos is None:
+        default_leg_pos = DEFAULT_LEG_POS
     torso = _root_body_id(mj)
 
     # body-frame angular velocity + linear velocity (flg_local=True)
@@ -166,11 +171,11 @@ def build_obs(mj: mujoco.MjModel, data: mujoco.MjData, cmd: np.ndarray,
     grav = R.T @ np.array([0.0, 0.0, -1.0])
 
     leg_pos = np.array([
-        data.qpos[mj.jnt_qposadr[mj.joint(n).id]] for n in LEG_JOINTS
-    ]) - DEFAULT_LEG_POS
+        data.qpos[mj.jnt_qposadr[mj.joint(n).id]] for n in leg_names
+    ]) - np.asarray(default_leg_pos)
 
-    leg_vel = np.array([data.qvel[mj.jnt_dofadr[mj.joint(n).id]] for n in LEG_JOINTS])
-    wheel_vel = np.array([data.qvel[mj.jnt_dofadr[mj.joint(n).id]] for n in WHEEL_JOINTS])
+    leg_vel = np.array([data.qvel[mj.jnt_dofadr[mj.joint(n).id]] for n in leg_names])
+    wheel_vel = np.array([data.qvel[mj.jnt_dofadr[mj.joint(n).id]] for n in wheel_names])
 
     obs = np.concatenate([
         cmd,                                   # 0-2   cmd vx, vy, wz
@@ -217,6 +222,17 @@ def main():
                     help="action delay in policy steps of 20 ms (default 3 = 60 ms; "
                          "training always uses 20-60 ms)")
     p.add_argument("--noise-std", type=float, default=0.0, help="obs gaussian noise std")
+    p.add_argument("--legs", nargs=4, default=list(LEG_JOINTS),
+                   help="leg joint names, contract order (default: official V14 rear-first)")
+    p.add_argument("--wheels", nargs=2, default=list(WHEEL_JOINTS),
+                   help="wheel joint names [left, right]")
+    p.add_argument("--leg-defaults", nargs=4, type=float, default=[0.0, 0.0, 0.0, 0.0],
+                   help="default leg pose subtracted in obs / added in action decode")
+    p.add_argument("--no-springs", action="store_true",
+                   help="model has no gas springs (serial-leg robot)")
+    p.add_argument("--wheel-kv", type=float, default=0.2,
+                   help="wheel velocity servo gain Nm/(rad/s); V14=0.2 (official), "
+                        "own serial-leg V3.3=1.0 (trained value)")
     args = p.parse_args()
 
     import onnxruntime as ort
@@ -228,11 +244,14 @@ def main():
     if mj.jnt_type[0] == mujoco.mjtJoint.mjJNT_FREE:
         data.qpos[2] = args.init_z
     mujoco.mj_forward(mj, data)
+    leg_names = tuple(args.legs)
+    wheel_names = tuple(args.wheels)
+    default_leg_pos = np.asarray(args.leg_defaults)
     if any(n not in [mujoco.mj_id2name(mj, mujoco.mjtObj.mjOBJ_JOINT, j) for j in range(mj.njnt)]
-           for n in LEG_JOINTS + WHEEL_JOINTS):
+           for n in leg_names + wheel_names):
         print("note: model lacks contract joint names — obs/action mapping will fail")
-    leg_act, wheel_act = actuator_ids_of(mj)
-    spring_act = spring_binding(mj)
+    leg_act, wheel_act = actuator_ids_of(mj, leg_names, wheel_names)
+    spring_act = [] if args.no_springs else spring_binding(mj)
     print(f"actuators: legs={leg_act} wheels={wheel_act} springs={[a for (_, a) in spring_act]}")
 
     sess = ort.InferenceSession(args.policy, providers=["CPUExecutionProvider"])
@@ -251,7 +270,8 @@ def main():
     t0 = time.time()
     for tick in range(n_ticks):
         if tick % STEPS_PER_POLICY == 0:
-            obs = build_obs(mj, data, cmd, args.height_cmd, last_action)
+            obs = build_obs(mj, data, cmd, args.height_cmd, last_action,
+                            leg_names, wheel_names, default_leg_pos)
             if args.noise_std > 0:
                 obs = obs + rng.normal(0, args.noise_std, obs.shape).astype(np.float32)
             obs = obs_delay(obs)
@@ -260,7 +280,7 @@ def main():
             last_action = action.copy()
 
         applied = act_delay_q[0]
-        leg_t = DEFAULT_LEG_POS + LEG_ACTION_SCALE * applied[:4]
+        leg_t = default_leg_pos + LEG_ACTION_SCALE * applied[:4]
         wheel_v = np.clip(WHEEL_ACTION_SCALE * applied[4:], -MAX_WHEEL_VEL, MAX_WHEEL_VEL)
 
         # 500 Hz software PD ("hardware_pd_vel" semantics), actuator ids resolved
@@ -268,15 +288,15 @@ def main():
         # 2 physics substeps per 2 ms tick (timestep 0.001); PD recomputed every
         # substep to mirror the official write() semantics.
         for _ in range(PHYSICS_STEPS_PER_TICK):
-            for k, jname in enumerate(LEG_JOINTS):
+            for k, jname in enumerate(leg_names):
                 j = mj.joint(jname).id
                 q = data.qpos[mj.jnt_qposadr[j]]
                 dq = data.qvel[mj.jnt_dofadr[j]]
                 data.ctrl[leg_act[k]] = np.clip(LEG_KP * (leg_t[k] - q) - LEG_KD * dq,
                                                 -LEG_TORQUE_LIMIT, LEG_TORQUE_LIMIT)
-            for k, jname in enumerate(WHEEL_JOINTS):
+            for k, jname in enumerate(wheel_names):
                 dq = data.qvel[mj.jnt_dofadr[mj.joint(jname).id]]
-                data.ctrl[wheel_act[k]] = np.clip(WHEEL_KV * (wheel_v[k] - dq),
+                data.ctrl[wheel_act[k]] = np.clip(args.wheel_kv * (wheel_v[k] - dq),
                                                   -WHEEL_TORQUE_LIMIT, WHEEL_TORQUE_LIMIT)
             # gas springs: per-step force (authoritative linear curve, no damping)
             for (qadr, vadr), act in spring_act:
