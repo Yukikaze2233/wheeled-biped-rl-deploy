@@ -1,0 +1,28 @@
+[0.006s] Invoking command in '/home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/build/wheeled_rl_controller': DEBUGINFOD_URLS=https://debuginfod.archlinux.org _=/usr/bin/env /usr/bin/cmake /home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/src/controllers/wheeled_rl_controller -DCMAKE_INSTALL_PREFIX=/home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/install/wheeled_rl_controller
+[0.187s] -- The CXX compiler identification is GNU 16.2.1
+[0.193s] -- Detecting CXX compiler ABI info
+[0.277s] -- Detecting CXX compiler ABI info - done
+[0.286s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.286s] -- Detecting CXX compile features
+[0.286s] -- Detecting CXX compile features - done
+[0.294s] -- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.392s] -- Found Python3: /home/yukikaze/.local/bin/python3.11 (found version "3.11.15") found components: Interpreter
+[0.452s] CMake Error at CMakeLists.txt:8 (find_package):
+[0.452s]   By not providing "Findcontroller_interface.cmake" in CMAKE_MODULE_PATH this
+[0.452s]   project has asked CMake to find a package configuration file provided by
+[0.452s]   "controller_interface", but CMake did not find one.
+[0.452s] 
+[0.452s]   Could not find a package configuration file provided by
+[0.452s]   "controller_interface" with any of the following names:
+[0.452s] 
+[0.452s]     controller_interface.cps
+[0.452s]     controller_interfaceConfig.cmake
+[0.452s]     controller_interface-config.cmake
+[0.452s] 
+[0.452s]   Add the installation prefix of "controller_interface" to CMAKE_PREFIX_PATH
+[0.452s]   or set "controller_interface_DIR" to a directory containing one of the
+[0.452s]   above files.  If "controller_interface" provides a separate development
+[0.452s]   package or SDK, be sure it has been installed.
+[0.452s] 
+[0.452s] 
+[0.453s] -- Configuring incomplete, errors occurred!

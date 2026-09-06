@@ -1,0 +1,29 @@
+[0.009s] Invoking command in '/home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/build/wheeled_mujoco_system': DEBUGINFOD_URLS=https://debuginfod.archlinux.org _=/usr/bin/env /usr/bin/cmake /home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/src/interfaces/wheeled_mujoco_system -DCMAKE_INSTALL_PREFIX=/home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/install/wheeled_mujoco_system
+[0.191s] -- The CXX compiler identification is GNU 16.2.1
+[0.198s] -- Detecting CXX compiler ABI info
+[0.273s] -- Detecting CXX compiler ABI info - done
+[0.285s] -- Check for working CXX compiler: /usr/bin/c++ - skipped
+[0.285s] -- Detecting CXX compile features
+[0.286s] -- Detecting CXX compile features - done
+[0.294s] -- Found ament_cmake: 2.5.5 (/opt/ros/jazzy/share/ament_cmake/cmake)
+[0.400s] -- Found Python3: /home/yukikaze/.local/bin/python3.11 (found version "3.11.15") found components: Interpreter
+[0.455s] CMake Error at CMakeLists.txt:8 (find_package):
+[0.455s]   By not providing "Findhardware_interface.cmake" in CMAKE_MODULE_PATH this
+[0.455s]   project has asked CMake to find a package configuration file provided by
+[0.455s]   "hardware_interface", but CMake did not find one.
+[0.455s] 
+[0.455s]   Could not find a package configuration file provided by
+[0.455s]   "hardware_interface" with any of the following names:
+[0.455s] 
+[0.455s]     hardware_interface.cps
+[0.455s]     hardware_interfaceConfig.cmake
+[0.456s]     hardware_interface-config.cmake
+[0.456s] 
+[0.456s]   Add the installation prefix of "hardware_interface" to CMAKE_PREFIX_PATH or
+[0.456s]   set "hardware_interface_DIR" to a directory containing one of the above
+[0.456s]   files.  If "hardware_interface" provides a separate development package or
+[0.456s]   SDK, be sure it has been installed.
+[0.456s] 
+[0.456s] 
+[0.456s] -- Configuring incomplete, errors occurred!
+[0.457s] Invoked command in '/home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/build/wheeled_mujoco_system' returned '1': DEBUGINFOD_URLS=https://debuginfod.archlinux.org _=/usr/bin/env /usr/bin/cmake /home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/src/interfaces/wheeled_mujoco_system -DCMAKE_INSTALL_PREFIX=/home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/ros2/install/wheeled_mujoco_system

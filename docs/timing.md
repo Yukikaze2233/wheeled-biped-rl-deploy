@@ -36,7 +36,10 @@ tick++
 | 通道 | 目标 | 硬件层闭环 |
 |---|---|---|
 | 腿 ×4 | 位置:default + 0.5 × action | Kp=60, Kd=2(固件或 MuJoCo 插件) |
-| 轮 ×2 | 速度:clamp(10 × action, ±30) | 速度环 0.2 |
+| 轮 ×2 | 速度:clamp(10 × action, ±150 rad/s) | 速度环 0.2,|τ|≤5 Nm |
+
+(轮速模式官方缩放 `wheel_vel_action_scale=10`、钳位 `max_wheel_vel=100×1.5=150`,
+腿 PD 力矩钳位 ±40 Nm——见 CONTRACT.md 第 3 节。
 
 理由:固件闭环频率远高于上位机,且串口链路抖动被 PD 吸收;力矩直通模式
 (`torque`)保留为可选项但默认不用。
@@ -49,10 +52,12 @@ tick++
 动作路径:  保持 10 tick(20ms,设计使然)      (训练时已随机化 20–60ms)
 ```
 
-实机回环延迟(观测链 + 执行链)实测后填入 sim2sim 的
-`--obs-delay-ticks / --action-delay-ticks` 复现;训练侧已有同范围随机化,
-因此延迟不需要精确补偿,但**必须落在这两个范围内**——超范围的链路改动
-(如加感知前级)需要重训。
+延迟**不是可选项**:训练时 obs 20–80 ms / act 20–60 ms 常开,0 延迟会
+显著改变策略闭环(实测 13k 策略 vx=1.0:0 延迟 ≈0.19 m/s 且极限环,
+80/60 ms 延迟 0.935 m/s)。sim2sim 默认 `--obs-delay-ticks 4`(80 ms)、
+`--action-delay-ticks 3`(60 ms);ROS2 控制器参数 `obs_delay_steps=4`、
+`act_delay_steps=3`(每步 20 ms)。实机链路延迟实测后在此范围附近微调;
+超出范围的链路改动(如加感知前级)需要重训。
 
 ## PREPARE 状态的意义
 

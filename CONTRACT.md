@@ -59,15 +59,18 @@ ONNX Runtime 启动时严格校验:单输入单输出、名称、dtype、静态 
   部署模型若缺 pitch 关节等价于刚性固定,可接受。
 - 高度指令语义:训练 `use_absolute_height=True`,obs[3] = 底座绝对高度 z × 5.0,
   flat 默认 0.22 m(训练高度指令范围 0.20–0.42)。
-- 训练中 obs/act 延迟常开(obs 20–80 ms,act 20–60 ms,逐 env 随机);
-  sim2sim 用 `--obs-delay-ticks` / `--action-delay-ticks` 复现(0 延迟会显著改变策略闭环行为)。
+- 训练中 obs/act 延迟常开(obs 20–80 ms,act 20–60 ms,逐 env 随机);部署端必须复现:
+  sim2sim 默认 `--obs-delay-ticks 4` / `--action-delay-ticks 3`(80/60 ms),
+  ROS2 控制器参数 `obs_delay_steps=4` / `act_delay_steps=3`。
+  实测(官方 13k flat_and_rotation 策略,vx=1.0):0 延迟约 0.19 m/s 且极限环,
+  80/60 ms 延迟 0.935 m/s —— 延迟不是可选项,是合同的一部分。
 - PREPARE 阶段(上电):四腿目标插值到 0 rad,最大 1 rad/s。
 
 ## 4. 观测扰动(部署端可配)
 
 | 参数 | 默认 |
 | --- | --- |
-| obs/action 延迟 | 0(训练时已做 20–80 ms 随机化) |
+| obs/action 延迟 | obs 80 ms(4 步)/ act 60 ms(3 步),实测最优 |
 | 噪声注入 | 关闭 |
 
 ## 5. 状态机

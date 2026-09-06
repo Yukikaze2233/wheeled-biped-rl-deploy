@@ -16,10 +16,15 @@ controller_manager:
 wheeled_rl_controller:
   ros__parameters:
     model_path: "policy/policy.onnx"   # 35D -> 6D, validated by check_onnx_contract.py
+    # pipeline delays in 50 Hz policy steps (20 ms each); official training
+    # always runs obs 20-80 ms / act 20-60 ms. 80/60 ms measured best for the
+    # official 13k flat_and_rotation policy (see docs/timing.md).
+    obs_delay_steps: 4   # 80 ms
+    act_delay_steps: 3   # 60 ms
 
 wheeled_mujoco_system:
   ros__parameters:
-    mjcf_path: "models/wheeled_biped.xml"
+    mjcf_path: "models/wheelbipe_v14_gimbal_scene.xml"  # official closed-loop MJCF + floor
 
 # (real backend) replace the hardware plugin with the RealBridge SystemInterface:
 # wheeled_real_system:

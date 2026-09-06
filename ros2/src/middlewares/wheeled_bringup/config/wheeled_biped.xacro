@@ -9,7 +9,7 @@
     <hardware>
       <xacro:if value="${'$(arg backend)' == 'sim'}">
         <plugin>wheeled_mujoco_system/WheeledMujocoSystem</plugin>
-        <param name="mjcf_path">models/wheeled_biped.xml</param>
+        <param name="mjcf_path">models/wheelbipe_v14_gimbal_scene.xml</param>
       </xacro:if>
       <xacro:if value="${'$(arg backend)' == 'real'}">
         <!-- TODO(yukikaze): RealBridge SystemInterface (serial protocol) -->
@@ -17,22 +17,24 @@
       </xacro:if>
     </hardware>
 
-    <joint name="left_front1_joint">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
-    <joint name="right_front1_joint">
-      <command_interface name="position"/>
-      <state_interface name="position"/>
-      <state_interface name="velocity"/>
-    </joint>
+    <!-- CONTRACT order: rear-first [LR, RR, LF, RF] (official training
+         legs_act joint order; policy obs/action dims follow this list) -->
     <joint name="left_rear1_joint">
       <command_interface name="position"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>
     </joint>
     <joint name="right_rear1_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="left_front1_joint">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="right_front1_joint">
       <command_interface name="position"/>
       <state_interface name="position"/>
       <state_interface name="velocity"/>

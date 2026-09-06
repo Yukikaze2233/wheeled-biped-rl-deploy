@@ -1,6 +1,7 @@
 // Implementation of WheeledMujocoSystem — see mujoco_system.hpp.
 #include "wheeled_mujoco_system/mujoco_system.hpp"
 
+#include <algorithm>
 #include <cmath>
 
 #include "hardware_interface/types/hardware_interface_type_values.hpp"
@@ -82,19 +83,43 @@ hardware_interface::CallbackReturn WheeledMujocoSystem::on_configure(
       return hardware_interface::CallbackReturn::ERROR;
     }
     data_ = mj_makeData(model_);
+    // root body for IMU reads: the free-joint body (scene has floating_base),
+    // falling back to "base_link" for non-floating models.
+    root_body_id_ = -1;
+    for (int j = 0; j < model_->njnt; ++j) {
+      if (model_->jnt_type[j] == mjJNT_FREE) { root_body_id_ = model_->jnt_bodyid[j]; break; }
+    }
+    if (root_body_id_ < 0) {
+      root_body_id_ = mj_name2id(model_, mjOBJ_BODY, "base_link");
+    }
+    // absolute-height standing pose: base z = 0.22 m, joints at ref
+    if (root_body_id_ >= 0 && model_->nq > 2) data_->qpos[2] = kInitBaseHeight;
     for (const auto & name : joint_names_) {
       const int id = mj_name2id(model_, mjOBJ_JOINT, name.c_str());
       if (id < 0) {
         RCLCPP_ERROR(rclcpp::get_logger("WheeledMujocoSystem"), "joint not in model: %s", name.c_str());
         return hardware_interface::CallbackReturn::ERROR;
       }
-      // (leg vs wheel classification by name suffix, per contract)
+      // actuators are addressed BY NAME ({joint}_ctrl): MJCF actuator order
+      // is not the contract order (CONTRACT.md, verified in sim2sim).
+      const std::string act_name = name + "_ctrl";
+      const int act = mj_name2id(model_, mjOBJ_ACTUATOR, act_name.c_str());
       if (name.find("wheel") != std::string::npos) {
         wheel_joint_ids_.push_back(id);
+        wheel_act_ids_.push_back(act);
       } else {
         leg_joint_ids_.push_back(id);
+        leg_act_ids_.push_back(act);
       }
     }
+    // gas-spring actuators driven by this plugin (not ros2_control interfaces)
+    for (int a = 0; a < model_->nu; ++a) {
+      const char * aname = mj_id2name(model_, mjOBJ_ACTUATOR, a);
+      if (aname && std::string(aname).find("spring2") != std::string::npos) {
+        spring_act_ids_.push_back(a);
+      }
+    }
+    mj_forward(model_, data_);
   }
 #endif
   return hardware_interface::CallbackReturn::SUCCESS;
@@ -118,12 +143,11 @@ hardware_interface::return_type WheeledMujocoSystem::read(
     joint_position_[i] = data_->qpos[model_->jnt_qposadr[id]];
     joint_velocity_[i] = data_->qvel[model_->jnt_dofadr[id]];
   }
-  // torso body-frame angular velocity + projected gravity
-  const int torso = mj_name2id(model_, mjOBJ_BODY, "torso");
+  // root body-frame angular velocity + projected gravity (free-joint body)
   mjtNum vel[6];
-  mj_objectVelocity(model_, data_, mjOBJ_BODY, torso, vel, 1);
+  mj_objectVelocity(model_, data_, mjOBJ_BODY, root_body_id_, vel, 1);
   gyro_ = {vel[0], vel[1], vel[2]};
-  const double * R = data_->xmat + 9 * torso;
+  const double * R = data_->xmat + 9 * root_body_id_;
   // projected gravity = R^T @ [0, 0, -1] -> negate the third column of R
   gravity_ = {-R[2], -R[5], -R[8]};
 #endif
@@ -137,19 +161,37 @@ hardware_interface::return_type WheeledMujocoSystem::write(
   if (model_ == nullptr) {
     return hardware_interface::return_type::OK;
   }
-  // close the low-level loops ("hardware_pd_vel") and step physics 500 Hz
-  for (size_t i = 0; i < leg_joint_ids_.size(); ++i) {
-    const int id = leg_joint_ids_[i];
-    const double q = data_->qpos[model_->jnt_qposadr[id]];
-    const double dq = data_->qvel[model_->jnt_dofadr[id]];
-    data_->ctrl[id] = kLegKp * (position_commands_[i] - q) - kLegKd * dq;
+  // close the low-level loops ("hardware_pd_vel"), 2 physics substeps per
+  // 500 Hz tick (scene timestep 0.001), PD recomputed every substep (official
+  // semantics), torque-clamped, springs applied.
+  for (int s = 0; s < kPhysicsStepsPerTick; ++s) {
+    for (size_t i = 0; i < leg_joint_ids_.size(); ++i) {
+      const int id = leg_joint_ids_[i];
+      const double q = data_->qpos[model_->jnt_qposadr[id]];
+      const double dq = data_->qvel[model_->jnt_dofadr[id]];
+      double tau = kLegKp * (position_commands_[i] - q) - kLegKd * dq;
+      tau = std::clamp(tau, -kLegTorqueLimit, kLegTorqueLimit);
+      const int act = leg_act_ids_[i];
+      if (act >= 0) data_->ctrl[act] = tau;
+    }
+    for (size_t i = 0; i < wheel_joint_ids_.size(); ++i) {
+      const int id = wheel_joint_ids_[i];
+      const double dq = data_->qvel[model_->jnt_dofadr[id]];
+      double tau = kWheelKv * (velocity_commands_[i] - dq);
+      tau = std::clamp(tau, -kWheelTorqueLimit, kWheelTorqueLimit);
+      const int act = wheel_act_ids_[i];
+      if (act >= 0) data_->ctrl[act] = tau;
+    }
+    // gas springs: F = 400 + 200/0.07 * clamp(0.06076 - q, min=0) N
+    for (const int act : spring_act_ids_) {
+      const int jnt = model_->actuator_trnid[act * 2];
+      const double q = data_->qpos[model_->jnt_qposadr[jnt]];
+      const double compression = std::max(kSpringOffset - q, 0.0);
+      data_->ctrl[act] = kSpringForceFree +
+        (kSpringForceCompressed - kSpringForceFree) / kSpringTravel * compression;
+    }
+    mj_step(model_, data_);
   }
-  for (size_t i = 0; i < wheel_joint_ids_.size(); ++i) {
-    const int id = wheel_joint_ids_[i];
-    const double dq = data_->qvel[model_->jnt_dofadr[id]];
-    data_->ctrl[id] = kWheelKv * (velocity_commands_[i] - dq);
-  }
-  mj_step(model_, data_);
 #endif
   return hardware_interface::return_type::OK;
 }

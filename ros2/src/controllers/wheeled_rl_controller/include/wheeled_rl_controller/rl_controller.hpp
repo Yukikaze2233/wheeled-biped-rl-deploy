@@ -23,7 +23,13 @@ constexpr int kControlHz = 500;
 constexpr int kPolicyHz = 50;
 constexpr int kTicksPerPolicy = kControlHz / kPolicyHz;
 constexpr double kLegActionScale = 0.5;
-constexpr double kWheelActionScale = 10.0;
+constexpr double kWheelActionScale = 10.0;   // wheel_vel_action_scale (velocity mode)
+constexpr double kMaxWheelVel = 150.0;       // max_wheel_vel = 100 * 1.5 (official)
+// pipeline delays in POLICY steps (20 ms each); training always uses
+// obs 20-80 ms / act 20-60 ms. Measured best on the official 13k policy:
+// obs 4 steps (80 ms), act 3 steps (60 ms).
+constexpr int kMaxObsDelaySteps = 4;
+constexpr int kMaxActDelaySteps = 3;
 
 class WheeledRLController : public controller_interface::ControllerInterface
 {
@@ -41,12 +47,17 @@ private:
   std::array<double, kActionDim> joint_commands_{};
   std::array<double, 4> position_targets_{};      // PREPARE interpolation state
   std::array<float, robot_state::kObsDim> obs_{};
-  std::array<float, robot_state::kActionDim> action_{};
+  std::array<float, robot_state::kActionDim> action_{};  // raw (undelayed) last action
   robot_state::RobotStateBuffer state_buffer_;
   fsm::StateMachine fsm_;
   onnxruntime::PolicyRuntime policy_;
   int tick_ = 0;
+  int policy_step_ = 0;
   double height_cmd_ = 0.22;
+  int obs_delay_steps_ = 4;  // 80 ms (ros2_control param obs_delay_steps overrides)
+  int act_delay_steps_ = 3;  // 60 ms
+  std::array<std::array<float, robot_state::kObsDim>, kMaxObsDelaySteps + 1> obs_ring_{};
+  std::array<std::array<float, robot_state::kActionDim>, kMaxActDelaySteps + 1> act_ring_{};
 
   rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_sub_;
   rclcpp::Subscription<std_msgs::msg::Float64>::SharedPtr height_sub_;

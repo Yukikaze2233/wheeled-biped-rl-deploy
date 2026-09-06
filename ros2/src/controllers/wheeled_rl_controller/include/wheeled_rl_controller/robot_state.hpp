@@ -10,7 +10,10 @@ namespace wheeled_rl::robot_state
 {
 
 constexpr size_t kStateCount = 16;
-// layout: [0..3] leg pos, [4..7] leg vel, [8..9] wheel vel, [10..12] gyro, [13..15] proj gravity
+// layout (rear-first contract order):
+//   [0..3] leg pos [left_rear, right_rear, left_front, right_front]
+//   [4..7] leg vel (same order), [8..9] wheel vel [left, right]
+//   [10..12] gyro, [13..15] proj gravity
 constexpr double kAngVelScale = 0.5;
 constexpr double kHeightCmdScale = 5.0;
 constexpr double kJointVelScale = 0.1;

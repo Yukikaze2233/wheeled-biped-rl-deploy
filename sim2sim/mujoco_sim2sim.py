@@ -210,8 +210,12 @@ def main():
     p.add_argument("--wz", type=float, default=0.0)
     p.add_argument("--height-cmd", type=float, default=0.22)
     p.add_argument("--init-z", type=float, default=0.22, help="initial base height (training uses absolute height; default standing 0.22)")
-    p.add_argument("--obs-delay-ticks", type=int, default=0, help="delay in 500 Hz ticks")
-    p.add_argument("--action-delay-ticks", type=int, default=0)
+    p.add_argument("--obs-delay-ticks", type=int, default=4,
+                    help="obs delay in policy steps of 20 ms (default 4 = 80 ms; "
+                         "training always uses 20-80 ms)")
+    p.add_argument("--action-delay-ticks", type=int, default=3,
+                    help="action delay in policy steps of 20 ms (default 3 = 60 ms; "
+                         "training always uses 20-60 ms)")
     p.add_argument("--noise-std", type=float, default=0.0, help="obs gaussian noise std")
     args = p.parse_args()
 
