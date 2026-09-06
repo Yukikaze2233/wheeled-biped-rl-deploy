@@ -185,7 +185,7 @@ def main():
             last_action[:] = 0
             action[:] = 0
 
-        if tick % 5 == 0:
+        if tick % 25 == 0:  # ~20 fps render (keeps CPU for training)
             # apply mouse motion (accumulated via callbacks in drag dict)
             if drag["button"] >= 0:
                 cx, cy = _glfw.get_cursor_pos(window)
