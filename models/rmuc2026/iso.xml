@@ -1,0 +1,1 @@
+<mujoco><asset><mesh name="t" file="collision/col_part_00.stl"/></asset><worldbody><geom name="g" mesh="t"/></worldbody></mujoco>

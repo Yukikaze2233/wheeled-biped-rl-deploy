@@ -161,13 +161,15 @@ def build_obs(mj: mujoco.MjModel, data: mujoco.MjData, cmd: np.ndarray,
         default_leg_pos = DEFAULT_LEG_POS
     torso = _root_body_id(mj)
 
-    # body-frame angular velocity + linear velocity (flg_local=True)
+    # mjOBJ_BODY local=True uses principal INERTIAL axes (ximat), not the
+    # mechanical body axes (xmat) used by training root_ang_vel_b and gravity.
+    # Read world-oriented velocity at the COM, then rotate into body axes.
     vel = np.zeros(6)
-    mujoco.mj_objectVelocity(mj, data, mujoco.mjtObj.mjOBJ_BODY, torso, vel, True)
-    ang_vel = vel[0:3]
+    mujoco.mj_objectVelocity(mj, data, mujoco.mjtObj.mjOBJ_BODY, torso, vel, False)
+    R = data.xmat[torso].reshape(3, 3)
+    ang_vel = R.T @ vel[0:3]
 
     # projected gravity: R^T @ g_hat
-    R = data.xmat[torso].reshape(3, 3)
     grav = R.T @ np.array([0.0, 0.0, -1.0])
 
     leg_pos = np.array([
@@ -193,17 +195,26 @@ def build_obs(mj: mujoco.MjModel, data: mujoco.MjData, cmd: np.ndarray,
 
 
 class ObsDelay:
-    """Fixed observation delay in control ticks (0 = none)."""
+    """Delay by exactly ``steps`` calls (policy ticks at the call site).
+
+    At tick t return input[max(0, t - steps)]: unavailable prehistory holds
+    the first observation. Zero delay is an identity; positive delays own
+    snapshots so reused input/output arrays cannot corrupt the history.
+    """
 
     def __init__(self, steps: int):
-        self.steps = steps
-        self.buf: deque[np.ndarray] = deque(maxlen=steps) if steps > 0 else None
+        if not isinstance(steps, (int, np.integer)) or isinstance(steps, bool):
+            raise TypeError("steps must be an integer")
+        if steps < 0:
+            raise ValueError("steps must be non-negative")
+        self.steps = int(steps)
+        self.buf: deque[np.ndarray] = deque(maxlen=self.steps + 1) if steps > 0 else None
 
     def __call__(self, obs: np.ndarray) -> np.ndarray:
         if self.buf is None:
             return obs
-        self.buf.append(obs)
-        return self.buf[0]
+        self.buf.append(obs.copy())
+        return self.buf[0].copy()
 
 
 def main():

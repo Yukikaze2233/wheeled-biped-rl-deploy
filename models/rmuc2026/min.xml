@@ -1,0 +1,12 @@
+<mujoco>
+<asset>
+    <mesh name="c_col_part_00" file="collision/col_part_00.stl"/>
+    <mesh name="c_col_part_01" file="collision/col_part_01.stl"/>
+    <mesh name="c_col_part_02" file="collision/col_part_02.stl"/>
+  </asset>
+<worldbody>
+    <geom name="g_col_part_00" mesh="c_col_part_00" contype="1" conaffinity="1"/>
+    <geom name="g_col_part_01" mesh="c_col_part_01" contype="1" conaffinity="1"/>
+    <geom name="g_col_part_02" mesh="c_col_part_02" contype="1" conaffinity="1"/>
+</worldbody>
+</mujoco>

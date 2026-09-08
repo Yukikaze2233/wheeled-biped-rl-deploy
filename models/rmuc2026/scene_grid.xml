@@ -1,0 +1,330 @@
+<mujoco model="rmuc2026_scene">
+  <option timestep="0.0005" integrator="implicitfast" solver="Newton" iterations="200" tolerance="1e-11"/>
+  <asset>
+    <mesh name="c_col_part_00" file="collision/col_part_00.stl"/>
+    <mesh name="c_col_part_01" file="collision/col_part_01.stl"/>
+    <mesh name="c_col_part_02" file="collision/col_part_02.stl"/>
+    <mesh name="c_col_part_03" file="collision/col_part_03.stl"/>
+    <mesh name="c_col_part_04" file="collision/col_part_04.stl"/>
+    <mesh name="c_col_part_05" file="collision/col_part_05.stl"/>
+    <mesh name="c_col_part_06" file="collision/col_part_06.stl"/>
+    <mesh name="c_col_part_07" file="collision/col_part_07.stl"/>
+    <mesh name="c_col_part_08" file="collision/col_part_08.stl"/>
+    <mesh name="c_col_part_09" file="collision/col_part_09.stl"/>
+    <mesh name="c_col_part_10" file="collision/col_part_10.stl"/>
+    <mesh name="c_col_part_11" file="collision/col_part_11.stl"/>
+    <mesh name="c_col_part_12" file="collision/col_part_12.stl"/>
+    <mesh name="c_col_part_13_s0" file="collision/col_part_13_s0.stl"/>
+    <mesh name="c_col_part_13_s1" file="collision/col_part_13_s1.stl"/>
+    <mesh name="c_col_part_13_s2" file="collision/col_part_13_s2.stl"/>
+    <mesh name="c_col_part_13_s3" file="collision/col_part_13_s3.stl"/>
+    <mesh name="c_col_part_13_s4" file="collision/col_part_13_s4.stl"/>
+    <mesh name="c_col_part_13_s5" file="collision/col_part_13_s5.stl"/>
+    <mesh name="c_col_part_13_s6" file="collision/col_part_13_s6.stl"/>
+    <mesh name="c_col_part_13_s7" file="collision/col_part_13_s7.stl"/>
+    <mesh name="c_col_part_14_s0" file="collision/col_part_14_s0.stl"/>
+    <mesh name="c_col_part_14_s1" file="collision/col_part_14_s1.stl"/>
+    <mesh name="c_col_part_14_s2" file="collision/col_part_14_s2.stl"/>
+    <mesh name="c_col_part_14_s3" file="collision/col_part_14_s3.stl"/>
+    <mesh name="c_col_part_14_s4" file="collision/col_part_14_s4.stl"/>
+    <mesh name="c_col_part_14_s5" file="collision/col_part_14_s5.stl"/>
+    <mesh name="c_col_part_14_s6" file="collision/col_part_14_s6.stl"/>
+    <mesh name="c_col_part_14_s7" file="collision/col_part_14_s7.stl"/>
+    <mesh name="c_col_part_15" file="collision/col_part_15.stl"/>
+    <mesh name="c_col_part_16" file="collision/col_part_16.stl"/>
+    <mesh name="c_col_part_17" file="collision/col_part_17.stl"/>
+    <mesh name="c_col_part_18" file="collision/col_part_18.stl"/>
+    <mesh name="c_col_part_19" file="collision/col_part_19.stl"/>
+    <mesh name="c_col_part_20" file="collision/col_part_20.stl"/>
+    <mesh name="c_col_part_21" file="collision/col_part_21.stl"/>
+    <mesh name="c_col_part_22" file="collision/col_part_22.stl"/>
+    <mesh name="c_col_part_23" file="collision/col_part_23.stl"/>
+    <mesh name="c_col_part_24" file="collision/col_part_24.stl"/>
+    <mesh name="c_col_part_25" file="collision/col_part_25.stl"/>
+    <mesh name="c_col_part_26" file="collision/col_part_26.stl"/>
+    <mesh name="c_col_part_27" file="collision/col_part_27.stl"/>
+    <mesh name="c_col_part_28" file="collision/col_part_28.stl"/>
+    <mesh name="c_col_part_29" file="collision/col_part_29.stl"/>
+    <mesh name="c_col_part_30" file="collision/col_part_30.stl"/>
+    <mesh name="c_col_part_31" file="collision/col_part_31.stl"/>
+    <mesh name="c_col_part_32" file="collision/col_part_32.stl"/>
+    <mesh name="c_col_part_33" file="collision/col_part_33.stl"/>
+    <mesh name="c_col_part_34" file="collision/col_part_34.stl"/>
+    <mesh name="c_col_part_35" file="collision/col_part_35.stl"/>
+    <mesh name="c_col_part_36" file="collision/col_part_36.stl"/>
+    <mesh name="c_col_part_37" file="collision/col_part_37.stl"/>
+    <mesh name="c_col_part_38" file="collision/col_part_38.stl"/>
+    <mesh name="c_col_part_39" file="collision/col_part_39.stl"/>
+    <mesh name="c_col_part_40" file="collision/col_part_40.stl"/>
+    <mesh name="c_col_part_41" file="collision/col_part_41.stl"/>
+    <mesh name="c_col_part_42" file="collision/col_part_42.stl"/>
+    <mesh name="c_col_part_43" file="collision/col_part_43.stl"/>
+    <mesh name="c_col_part_44" file="collision/col_part_44.stl"/>
+    <mesh name="c_col_part_45" file="collision/col_part_45.stl"/>
+    <mesh name="c_col_part_46" file="collision/col_part_46.stl"/>
+    <mesh name="c_col_part_47" file="collision/col_part_47.stl"/>
+    <mesh name="c_col_part_48" file="collision/col_part_48.stl"/>
+    <mesh name="c_col_part_49" file="collision/col_part_49.stl"/>
+    <mesh name="c_col_part_50" file="collision/col_part_50.stl"/>
+    <mesh name="c_col_part_51" file="collision/col_part_51.stl"/>
+    <mesh name="c_col_part_52" file="collision/col_part_52.stl"/>
+    <mesh name="c_col_part_53" file="collision/col_part_53.stl"/>
+    <mesh name="c_col_part_54" file="collision/col_part_54.stl"/>
+    <mesh name="c_col_part_55" file="collision/col_part_55.stl"/>
+    <mesh name="c_col_part_56" file="collision/col_part_56.stl"/>
+    <mesh name="c_col_part_57" file="collision/col_part_57.stl"/>
+    <mesh name="c_col_part_58" file="collision/col_part_58.stl"/>
+    <mesh name="c_col_part_59" file="collision/col_part_59.stl"/>
+    <mesh name="v_vis_part_00" file="visual/vis_part_00.stl"/>
+    <mesh name="v_vis_part_01" file="visual/vis_part_01.stl"/>
+    <mesh name="v_vis_part_02" file="visual/vis_part_02.stl"/>
+    <mesh name="v_vis_part_03" file="visual/vis_part_03.stl"/>
+    <mesh name="v_vis_part_04" file="visual/vis_part_04.stl"/>
+    <mesh name="v_vis_part_05" file="visual/vis_part_05.stl"/>
+    <mesh name="v_vis_part_06" file="visual/vis_part_06.stl"/>
+    <mesh name="v_vis_part_07" file="visual/vis_part_07.stl"/>
+    <mesh name="v_vis_part_08" file="visual/vis_part_08.stl"/>
+    <mesh name="v_vis_part_09" file="visual/vis_part_09.stl"/>
+    <mesh name="v_vis_part_10" file="visual/vis_part_10.stl"/>
+    <mesh name="v_vis_part_11" file="visual/vis_part_11.stl"/>
+    <mesh name="v_vis_part_12" file="visual/vis_part_12.stl"/>
+    <mesh name="v_vis_part_13_s0" file="visual/vis_part_13_s0.stl"/>
+    <mesh name="v_vis_part_13_s1" file="visual/vis_part_13_s1.stl"/>
+    <mesh name="v_vis_part_13_s2" file="visual/vis_part_13_s2.stl"/>
+    <mesh name="v_vis_part_13_s3" file="visual/vis_part_13_s3.stl"/>
+    <mesh name="v_vis_part_13_s4" file="visual/vis_part_13_s4.stl"/>
+    <mesh name="v_vis_part_13_s5" file="visual/vis_part_13_s5.stl"/>
+    <mesh name="v_vis_part_13_s6" file="visual/vis_part_13_s6.stl"/>
+    <mesh name="v_vis_part_13_s7" file="visual/vis_part_13_s7.stl"/>
+    <mesh name="v_vis_part_14_s0" file="visual/vis_part_14_s0.stl"/>
+    <mesh name="v_vis_part_14_s1" file="visual/vis_part_14_s1.stl"/>
+    <mesh name="v_vis_part_14_s2" file="visual/vis_part_14_s2.stl"/>
+    <mesh name="v_vis_part_14_s3" file="visual/vis_part_14_s3.stl"/>
+    <mesh name="v_vis_part_14_s4" file="visual/vis_part_14_s4.stl"/>
+    <mesh name="v_vis_part_14_s5" file="visual/vis_part_14_s5.stl"/>
+    <mesh name="v_vis_part_14_s6" file="visual/vis_part_14_s6.stl"/>
+    <mesh name="v_vis_part_14_s7" file="visual/vis_part_14_s7.stl"/>
+    <mesh name="v_vis_part_15" file="visual/vis_part_15.stl"/>
+    <mesh name="v_vis_part_16" file="visual/vis_part_16.stl"/>
+    <mesh name="v_vis_part_17" file="visual/vis_part_17.stl"/>
+    <mesh name="v_vis_part_18" file="visual/vis_part_18.stl"/>
+    <mesh name="v_vis_part_19" file="visual/vis_part_19.stl"/>
+    <mesh name="v_vis_part_20" file="visual/vis_part_20.stl"/>
+    <mesh name="v_vis_part_21" file="visual/vis_part_21.stl"/>
+    <mesh name="v_vis_part_22" file="visual/vis_part_22.stl"/>
+    <mesh name="v_vis_part_23" file="visual/vis_part_23.stl"/>
+    <mesh name="v_vis_part_24" file="visual/vis_part_24.stl"/>
+    <mesh name="v_vis_part_25" file="visual/vis_part_25.stl"/>
+    <mesh name="v_vis_part_26" file="visual/vis_part_26.stl"/>
+    <mesh name="v_vis_part_27" file="visual/vis_part_27.stl"/>
+    <mesh name="v_vis_part_28" file="visual/vis_part_28.stl"/>
+    <mesh name="v_vis_part_29" file="visual/vis_part_29.stl"/>
+    <mesh name="v_vis_part_30" file="visual/vis_part_30.stl"/>
+    <mesh name="v_vis_part_31" file="visual/vis_part_31.stl"/>
+    <mesh name="v_vis_part_32" file="visual/vis_part_32.stl"/>
+    <mesh name="v_vis_part_33" file="visual/vis_part_33.stl"/>
+    <mesh name="v_vis_part_34" file="visual/vis_part_34.stl"/>
+    <mesh name="v_vis_part_35" file="visual/vis_part_35.stl"/>
+    <mesh name="v_vis_part_36" file="visual/vis_part_36.stl"/>
+    <mesh name="v_vis_part_37" file="visual/vis_part_37.stl"/>
+    <mesh name="v_vis_part_38" file="visual/vis_part_38.stl"/>
+    <mesh name="v_vis_part_39" file="visual/vis_part_39.stl"/>
+    <mesh name="v_vis_part_40" file="visual/vis_part_40.stl"/>
+    <mesh name="v_vis_part_41" file="visual/vis_part_41.stl"/>
+    <mesh name="v_vis_part_42" file="visual/vis_part_42.stl"/>
+    <mesh name="v_vis_part_43" file="visual/vis_part_43.stl"/>
+    <mesh name="v_vis_part_44" file="visual/vis_part_44.stl"/>
+    <mesh name="v_vis_part_45" file="visual/vis_part_45.stl"/>
+    <mesh name="v_vis_part_46" file="visual/vis_part_46.stl"/>
+    <mesh name="v_vis_part_47" file="visual/vis_part_47.stl"/>
+    <mesh name="v_vis_part_48" file="visual/vis_part_48.stl"/>
+    <mesh name="v_vis_part_49" file="visual/vis_part_49.stl"/>
+    <mesh name="v_vis_part_50" file="visual/vis_part_50.stl"/>
+    <mesh name="v_vis_part_51" file="visual/vis_part_51.stl"/>
+    <mesh name="v_vis_part_52" file="visual/vis_part_52.stl"/>
+    <mesh name="v_vis_part_53" file="visual/vis_part_53.stl"/>
+    <mesh name="v_vis_part_54" file="visual/vis_part_54.stl"/>
+    <mesh name="v_vis_part_55" file="visual/vis_part_55.stl"/>
+    <mesh name="v_vis_part_56" file="visual/vis_part_56.stl"/>
+    <mesh name="v_vis_part_57" file="visual/vis_part_57.stl"/>
+    <mesh name="v_vis_part_58" file="visual/vis_part_58.stl"/>
+    <mesh name="v_vis_part_59" file="visual/vis_part_59.stl"/>
+  </asset>
+  <worldbody>
+    <light pos="0 -10 12" dir="0 10 -12" diffuse="0.9 0.9 0.9"/>
+    <light pos="0 10 12" dir="0 -10 -12" diffuse="0.5 0.5 0.5"/>
+    <geom name="col_col_part_00" mesh="c_col_part_00" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_01" mesh="c_col_part_01" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_02" mesh="c_col_part_02" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_03" mesh="c_col_part_03" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_04" mesh="c_col_part_04" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_05" mesh="c_col_part_05" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_06" mesh="c_col_part_06" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_07" mesh="c_col_part_07" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_08" mesh="c_col_part_08" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_09" mesh="c_col_part_09" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_10" mesh="c_col_part_10" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_11" mesh="c_col_part_11" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_12" mesh="c_col_part_12" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s0" mesh="c_col_part_13_s0" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s1" mesh="c_col_part_13_s1" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s2" mesh="c_col_part_13_s2" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s3" mesh="c_col_part_13_s3" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s4" mesh="c_col_part_13_s4" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s5" mesh="c_col_part_13_s5" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s6" mesh="c_col_part_13_s6" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_13_s7" mesh="c_col_part_13_s7" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s0" mesh="c_col_part_14_s0" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s1" mesh="c_col_part_14_s1" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s2" mesh="c_col_part_14_s2" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s3" mesh="c_col_part_14_s3" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s4" mesh="c_col_part_14_s4" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s5" mesh="c_col_part_14_s5" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s6" mesh="c_col_part_14_s6" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_14_s7" mesh="c_col_part_14_s7" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_15" mesh="c_col_part_15" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_16" mesh="c_col_part_16" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_17" mesh="c_col_part_17" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_18" mesh="c_col_part_18" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_19" mesh="c_col_part_19" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_20" mesh="c_col_part_20" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_21" mesh="c_col_part_21" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_22" mesh="c_col_part_22" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_23" mesh="c_col_part_23" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_24" mesh="c_col_part_24" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_25" mesh="c_col_part_25" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_26" mesh="c_col_part_26" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_27" mesh="c_col_part_27" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_28" mesh="c_col_part_28" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_29" mesh="c_col_part_29" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_30" mesh="c_col_part_30" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_31" mesh="c_col_part_31" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_32" mesh="c_col_part_32" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_33" mesh="c_col_part_33" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_34" mesh="c_col_part_34" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_35" mesh="c_col_part_35" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_36" mesh="c_col_part_36" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_37" mesh="c_col_part_37" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_38" mesh="c_col_part_38" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_39" mesh="c_col_part_39" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_40" mesh="c_col_part_40" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_41" mesh="c_col_part_41" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_42" mesh="c_col_part_42" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_43" mesh="c_col_part_43" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_44" mesh="c_col_part_44" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_45" mesh="c_col_part_45" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_46" mesh="c_col_part_46" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_47" mesh="c_col_part_47" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_48" mesh="c_col_part_48" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_49" mesh="c_col_part_49" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_50" mesh="c_col_part_50" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_51" mesh="c_col_part_51" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_52" mesh="c_col_part_52" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_53" mesh="c_col_part_53" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_54" mesh="c_col_part_54" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_55" mesh="c_col_part_55" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_56" mesh="c_col_part_56" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_57" mesh="c_col_part_57" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_58" mesh="c_col_part_58" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="col_col_part_59" mesh="c_col_part_59" friction="1.0" contype="1" conaffinity="1" group="3" rgba="0 0 0 0"/>
+    <geom name="vis_vis_part_00" mesh="v_vis_part_00" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_01" mesh="v_vis_part_01" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_02" mesh="v_vis_part_02" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_03" mesh="v_vis_part_03" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_04" mesh="v_vis_part_04" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_05" mesh="v_vis_part_05" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_06" mesh="v_vis_part_06" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_07" mesh="v_vis_part_07" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_08" mesh="v_vis_part_08" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_09" mesh="v_vis_part_09" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_10" mesh="v_vis_part_10" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_11" mesh="v_vis_part_11" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_12" mesh="v_vis_part_12" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s0" mesh="v_vis_part_13_s0" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s1" mesh="v_vis_part_13_s1" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s2" mesh="v_vis_part_13_s2" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s3" mesh="v_vis_part_13_s3" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s4" mesh="v_vis_part_13_s4" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s5" mesh="v_vis_part_13_s5" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s6" mesh="v_vis_part_13_s6" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_13_s7" mesh="v_vis_part_13_s7" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s0" mesh="v_vis_part_14_s0" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s1" mesh="v_vis_part_14_s1" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s2" mesh="v_vis_part_14_s2" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s3" mesh="v_vis_part_14_s3" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s4" mesh="v_vis_part_14_s4" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s5" mesh="v_vis_part_14_s5" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s6" mesh="v_vis_part_14_s6" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_14_s7" mesh="v_vis_part_14_s7" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_15" mesh="v_vis_part_15" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_16" mesh="v_vis_part_16" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_17" mesh="v_vis_part_17" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_18" mesh="v_vis_part_18" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_19" mesh="v_vis_part_19" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_20" mesh="v_vis_part_20" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_21" mesh="v_vis_part_21" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_22" mesh="v_vis_part_22" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_23" mesh="v_vis_part_23" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_24" mesh="v_vis_part_24" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_25" mesh="v_vis_part_25" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_26" mesh="v_vis_part_26" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_27" mesh="v_vis_part_27" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_28" mesh="v_vis_part_28" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_29" mesh="v_vis_part_29" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_30" mesh="v_vis_part_30" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_31" mesh="v_vis_part_31" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_32" mesh="v_vis_part_32" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_33" mesh="v_vis_part_33" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_34" mesh="v_vis_part_34" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_35" mesh="v_vis_part_35" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_36" mesh="v_vis_part_36" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_37" mesh="v_vis_part_37" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_38" mesh="v_vis_part_38" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_39" mesh="v_vis_part_39" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_40" mesh="v_vis_part_40" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_41" mesh="v_vis_part_41" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_42" mesh="v_vis_part_42" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_43" mesh="v_vis_part_43" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_44" mesh="v_vis_part_44" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_45" mesh="v_vis_part_45" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_46" mesh="v_vis_part_46" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_47" mesh="v_vis_part_47" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_48" mesh="v_vis_part_48" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_49" mesh="v_vis_part_49" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_50" mesh="v_vis_part_50" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_51" mesh="v_vis_part_51" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_52" mesh="v_vis_part_52" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_53" mesh="v_vis_part_53" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_54" mesh="v_vis_part_54" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_55" mesh="v_vis_part_55" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_56" mesh="v_vis_part_56" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_57" mesh="v_vis_part_57" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_58" mesh="v_vis_part_58" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+    <geom name="vis_vis_part_59" mesh="v_vis_part_59" contype="0" conaffinity="0" group="1" rgba="0.85 0.82 0.75 1"/>
+  
+  <body name="q0" pos="-12.0 -6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q1" pos="-12.0 -2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q2" pos="-12.0 2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q3" pos="-12.0 6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q4" pos="-7.2 -6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q5" pos="-7.2 -2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q6" pos="-7.2 2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q7" pos="-7.2 6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q8" pos="-2.4 -6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q9" pos="-2.4 -2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q10" pos="-2.4 2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q11" pos="-2.4 6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q12" pos="2.4 -6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q13" pos="2.4 -2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q14" pos="2.4 2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q15" pos="2.4 6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q16" pos="7.2 -6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q17" pos="7.2 -2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q18" pos="7.2 2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q19" pos="7.2 6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q20" pos="12.0 -6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q21" pos="12.0 -2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q22" pos="12.0 2.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+  <body name="q23" pos="12.0 6.0 1.0"><freejoint/><geom type="sphere" size="0.05" mass="0.1"/></body>
+</worldbody>
+</mujoco>

@@ -1,0 +1,6 @@
+<mujoco><asset><mesh name="t" file="collision/col_part_00.stl"/></asset>
+<worldbody>
+  <body name="fb">
+    <geom name="g" mesh="t" contype="1" conaffinity="1"/>
+  </body>
+</worldbody></mujoco>
