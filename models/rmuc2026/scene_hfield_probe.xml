@@ -1,0 +1,18 @@
+<mujoco model="rmuc2026_hfield_scene">
+  <option timestep="0.001"/>
+  <asset>
+    <hfield name="rmuc" file="/home/yukikaze/Documents/workspace/robot_rl/isaac_wheeled_rl_deploy/models/rmuc2026/rmuc2026_hfield.bin" size="28 15 3.4 0.05" nrow="375" ncol="700"/>
+    <texture name="tex" type="2d" builtin="checker" rgb1="0.5 0.45 0.4" rgb2="0.35 0.32 0.3" width="512" height="512"/>
+    <material name="fieldmat" texture="tex" texuniform="true"/>
+  </asset>
+  <worldbody>
+    <light pos="0 -10 14" dir="0 10 -14" diffuse="0.9 0.9 0.9"/>
+    <light pos="0 10 14" dir="0 -10 -14" diffuse="0.5 0.5 0.5"/>
+    <geom name="rmuc_terrain" type="hfield" hfield="rmuc" material="fieldmat" friction="1.0" contype="1" conaffinity="1"/>
+  
+  <body name="pA" pos="-10 4 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="pB" pos="0 0 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="pC" pos="8 -3 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="pD" pos="-6 -5 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+</worldbody>
+</mujoco>
