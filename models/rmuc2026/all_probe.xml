@@ -1,0 +1,42 @@
+<mujoco><option timestep="0.001"/><asset>
+    <mesh name="k_cvx_000" file="convex/cvx_000.stl"/>
+    <mesh name="k_cvx_001" file="convex/cvx_001.stl"/>
+    <mesh name="k_cvx_002" file="convex/cvx_002.stl"/>
+    <mesh name="k_cvx_003" file="convex/cvx_003.stl"/>
+    <mesh name="k_cvx_004" file="convex/cvx_004.stl"/>
+    <mesh name="k_cvx_005" file="convex/cvx_005.stl"/>
+    <mesh name="k_cvx_006" file="convex/cvx_006.stl"/>
+    <mesh name="k_cvx_007" file="convex/cvx_007.stl"/>
+    <mesh name="k_cvx_008" file="convex/cvx_008.stl"/>
+    <mesh name="k_cvx_009" file="convex/cvx_009.stl"/>
+    <mesh name="k_cvx_010" file="convex/cvx_010.stl"/>
+    <mesh name="k_cvx_011" file="convex/cvx_011.stl"/>
+    <mesh name="k_cvx_012" file="convex/cvx_012.stl"/>
+</asset><worldbody>
+  <body name="kb_cvx_000"><geom name="kg_cvx_000" mesh="k_cvx_000" contype="1" conaffinity="1"/></body>
+  <body name="q0" pos="11.593 -0.000 1.600"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_001"><geom name="kg_cvx_001" mesh="k_cvx_001" contype="1" conaffinity="1"/></body>
+  <body name="q1" pos="12.498 -5.059 2.004"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_002"><geom name="kg_cvx_002" mesh="k_cvx_002" contype="1" conaffinity="1"/></body>
+  <body name="q2" pos="7.947 4.369 1.133"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_003"><geom name="kg_cvx_003" mesh="k_cvx_003" contype="1" conaffinity="1"/></body>
+  <body name="q3" pos="7.947 -3.285 1.133"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_004"><geom name="kg_cvx_004" mesh="k_cvx_004" contype="1" conaffinity="1"/></body>
+  <body name="q4" pos="-2.430 0.000 1.418"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_005"><geom name="kg_cvx_005" mesh="k_cvx_005" contype="1" conaffinity="1"/></body>
+  <body name="q5" pos="-10.376 0.000 1.133"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_006"><geom name="kg_cvx_006" mesh="k_cvx_006" contype="1" conaffinity="1"/></body>
+  <body name="q6" pos="3.036 3.350 2.273"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_007"><geom name="kg_cvx_007" mesh="k_cvx_007" contype="1" conaffinity="1"/></body>
+  <body name="q7" pos="-12.498 5.059 2.004"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_008"><geom name="kg_cvx_008" mesh="k_cvx_008" contype="1" conaffinity="1"/></body>
+  <body name="q8" pos="-3.036 -3.350 2.273"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_009"><geom name="kg_cvx_009" mesh="k_cvx_009" contype="1" conaffinity="1"/></body>
+  <body name="q9" pos="-0.663 -0.539 3.586"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_010"><geom name="kg_cvx_010" mesh="k_cvx_010" contype="1" conaffinity="1"/></body>
+  <body name="q10" pos="-11.593 0.000 1.600"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_011"><geom name="kg_cvx_011" mesh="k_cvx_011" contype="1" conaffinity="1"/></body>
+  <body name="q11" pos="0.132 -0.152 3.538"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  <body name="kb_cvx_012"><geom name="kg_cvx_012" mesh="k_cvx_012" contype="1" conaffinity="1"/></body>
+  <body name="q12" pos="0.538 0.659 3.588"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+</worldbody></mujoco>

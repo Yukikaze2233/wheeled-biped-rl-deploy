@@ -1,0 +1,1 @@
+<mujoco><option timestep="0.001"/><worldbody><geom name="k" type="plane" size="5 5 0.1"/><body name="s" pos="0 0 0.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body></worldbody></mujoco>

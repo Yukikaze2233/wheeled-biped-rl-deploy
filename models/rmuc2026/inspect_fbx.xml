@@ -1,0 +1,14 @@
+<mujoco model="rmuc2026_fbx_inspect">
+  <option timestep="0.001"/>
+  <asset>
+    <mesh name="field" file="/home/yukikaze/Documents/workspace/robot_rl/field_maps/rmuc2026_official/RMUC2026_fbx_field.stl"/>
+    <texture name="tex" type="2d" builtin="checker" rgb1="0.45 0.5 0.55" rgb2="0.3 0.32 0.35" width="512" height="512"/>
+    <material name="mat" texture="tex" texuniform="true"/>
+  </asset>
+  <worldbody>
+    <light pos="0 -15 20" dir="0 15 -20" diffuse="0.9 0.9 0.9"/>
+    <light pos="0 15 20" dir="0 -15 -20" diffuse="0.5 0.5 0.5"/>
+    <light pos="15 0 10" dir="-15 0 -10" diffuse="0.4 0.4 0.4"/>
+    <geom name="field" mesh="field" material="mat" contype="0" conaffinity="0"/>
+  </worldbody>
+</mujoco>

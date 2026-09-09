@@ -1,0 +1,24 @@
+<mujoco model="working_field">
+  <option timestep="0.001"/>
+  <asset>    <mesh name="k_cvx_001" file="convex/cvx_001.stl"/>
+    <mesh name="k_cvx_002" file="convex/cvx_002.stl"/>
+    <mesh name="k_cvx_003" file="convex/cvx_003.stl"/>
+    <mesh name="k_cvx_004" file="convex/cvx_004.stl"/>
+    <mesh name="k_cvx_005" file="convex/cvx_005.stl"/>
+    <mesh name="k_cvx_007" file="convex/cvx_007.stl"/>
+    <mesh name="k_cvx_009" file="convex/cvx_009.stl"/>
+    <mesh name="k_cvx_010" file="convex/cvx_010.stl"/></asset>
+  <worldbody>
+    <light pos="0 -15 15" dir="0 15 -15" diffuse="0.9 0.9 0.9"/>
+    <light pos="0 15 15" dir="0 -15 -15" diffuse="0.4 0.4 0.4"/>
+    <geom name="floor" type="plane" size="30 20 0.1" rgba="0.25 0.28 0.32 1"/>
+      <body name="b_cvx_001" pos="12.4978 -5.0587 0"><geom name="g_cvx_001" mesh="k_cvx_001" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  <body name="b_cvx_002" pos="7.9468 4.3689 0"><geom name="g_cvx_002" mesh="k_cvx_002" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  <body name="b_cvx_003" pos="7.9468 -3.2851 0"><geom name="g_cvx_003" mesh="k_cvx_003" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  <body name="b_cvx_004" pos="-2.4300 0.0000 0"><geom name="g_cvx_004" mesh="k_cvx_004" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  <body name="b_cvx_005" pos="-10.3764 0.0000 0"><geom name="g_cvx_005" mesh="k_cvx_005" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  <body name="b_cvx_007" pos="-12.4980 5.0587 0"><geom name="g_cvx_007" mesh="k_cvx_007" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  <body name="b_cvx_009" pos="-0.6626 -0.5388 0"><geom name="g_cvx_009" mesh="k_cvx_009" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  <body name="b_cvx_010" pos="-11.5932 0.0001 0"><geom name="g_cvx_010" mesh="k_cvx_010" friction="1.0" contype="1" conaffinity="1" rgba="0.78 0.74 0.66 1"/></body>
+  </worldbody>
+</mujoco>

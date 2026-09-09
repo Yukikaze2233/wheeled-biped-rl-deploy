@@ -1,0 +1,38 @@
+<mujoco model="rmuc2026_convex">
+  <option timestep="0.001"/>
+  <asset>
+    <mesh name="k_cvx_000" file="cvx_000.stl"/>
+    <mesh name="k_cvx_001" file="cvx_001.stl"/>
+    <mesh name="k_cvx_002" file="cvx_002.stl"/>
+    <mesh name="k_cvx_003" file="cvx_003.stl"/>
+    <mesh name="k_cvx_004" file="cvx_004.stl"/>
+    <mesh name="k_cvx_005" file="cvx_005.stl"/>
+    <mesh name="k_cvx_006" file="cvx_006.stl"/>
+    <mesh name="k_cvx_007" file="cvx_007.stl"/>
+    <mesh name="k_cvx_008" file="cvx_008.stl"/>
+    <mesh name="k_cvx_009" file="cvx_009.stl"/>
+    <mesh name="k_cvx_010" file="cvx_010.stl"/>
+    <mesh name="k_cvx_011" file="cvx_011.stl"/>
+    <mesh name="k_cvx_012" file="cvx_012.stl"/>
+  </asset>
+  <worldbody>
+    <light pos="0 -10 12" dir="0 10 -12" diffuse="0.9 0.9 0.9"/>
+    <geom name="k_cvx_000" mesh="k_cvx_000" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_001" mesh="k_cvx_001" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_002" mesh="k_cvx_002" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_003" mesh="k_cvx_003" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_004" mesh="k_cvx_004" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_005" mesh="k_cvx_005" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_006" mesh="k_cvx_006" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_007" mesh="k_cvx_007" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_008" mesh="k_cvx_008" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_009" mesh="k_cvx_009" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_010" mesh="k_cvx_010" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_011" mesh="k_cvx_011" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <geom name="k_cvx_012" mesh="k_cvx_012" friction="1.0" contype="1" conaffinity="1" rgba="0.8 0.75 0.65 0.9"/>
+    <body name="p1" pos="-10 4 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+    <body name="p2" pos="0 0 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+    <body name="p3" pos="8 -3 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+    <body name="p4" pos="-6.66 -5.66 1.2"><freejoint/><geom type="sphere" size="0.08" mass="0.5"/></body>
+  </worldbody>
+</mujoco>

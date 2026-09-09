@@ -35,6 +35,14 @@ MuJoCo 编译 mesh 时自动做惯性主轴重对齐(mesh_quat ≠ identity),
 cd models/rmuc2026 && python3 -m mujoco.viewer --mjcf=scene.xml
 ```
 
+## ⚠️ 渲染问题(新发现, 2026-09-10)
+
+MuJoCo 3.13 对本场地 STL(195k 面)的**渲染失败**:碰撞数据编译正常(195k 面在),
+但视觉顶点 buffer 未建立 → viewer/Renderer 只画包围球(那颗"球"的真身)。
+3.12 渲染 3k 面小场正常, 推断与面数/顶点 buffer 上限或 3.13 回归有关。
+
+规避: 分块加载(每个 chunk <20 万面单独 asset, 已有 74 块分块文件)或降级 mujoco 3.12。
+
 ## 现状可用的替代
 - rough 任务:程序化高度场(台阶/坡面)已可用
 - 档位 A/B 部署验证:toy 场地即可
