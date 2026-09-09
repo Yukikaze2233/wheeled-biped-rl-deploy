@@ -1,0 +1,7 @@
+<mujoco model="rmuc2026_final">
+<asset><mesh name="f" file="/home/yukikaze/Documents/workspace/robot_rl/field_maps/rmuc2026_official/RMUC2026_field_190k.stl"/></asset>
+<worldbody>
+<light pos="0 -20 30" dir="0 20 -30" diffuse="1 1 1"/>
+<light pos="10 0 15" dir="-10 0 -15" diffuse="0.6 0.6 0.6"/>
+<geom name="g" mesh="f" rgba="0.78 0.62 0.38 1" contype="1" conaffinity="1"/>
+</worldbody></mujoco>

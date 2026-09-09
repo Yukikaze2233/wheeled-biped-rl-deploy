@@ -1,0 +1,15 @@
+<mujoco model="rmuc2026_visual">
+<asset>
+    <mesh name="f0" file="/tmp/quartile_0.stl"/>
+    <mesh name="f1" file="/tmp/quartile_1.stl"/>
+    <mesh name="f2" file="/tmp/quartile_2.stl"/>
+    <mesh name="f3" file="/tmp/quartile_3.stl"/>
+</asset>
+<worldbody>
+<light pos="0 -20 30" dir="0 20 -30" diffuse="1 1 1"/>
+<light pos="10 0 15" dir="-10 0 -15" diffuse="0.6 0.6 0.6"/>
+    <geom name="g0" mesh="f0" rgba="0.78 0.62 0.38 1" contype="0" conaffinity="0"/>
+    <geom name="g1" mesh="f1" rgba="0.78 0.62 0.38 1" contype="0" conaffinity="0"/>
+    <geom name="g2" mesh="f2" rgba="0.78 0.62 0.38 1" contype="0" conaffinity="0"/>
+    <geom name="g3" mesh="f3" rgba="0.78 0.62 0.38 1" contype="0" conaffinity="0"/>
+</worldbody></mujoco>

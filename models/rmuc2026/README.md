@@ -35,6 +35,23 @@ MuJoCo 编译 mesh 时自动做惯性主轴重对齐(mesh_quat ≠ identity),
 cd models/rmuc2026 && python3 -m mujoco.viewer --mjcf=scene.xml
 ```
 
+## ⚠️ 渲染问题(最终定论, 2026-09-10)
+
+**根因确诊**: 本机 pip 版 mujoco 的 GL 后端加载失败
+(`gl_context has no attribute GLContext` / EGL / osmesa 全部失败),
+导致 **所有 mesh geom 都被渲染为包围球**(碰撞数据正常, 仅渲染层坏)。
+证据链: 同一 STL — matplotlib 渲染出完整场地(正确) / MuJoCo 渲染成包围球(错误);
+官方机器人 MJCF 渲染正常与否随 GL 状态波动。
+
+**修复(未在本机执行, 需要系统权限)**:
+```bash
+sudo pacman -S glfw-x11 mesa-utils   # Arch: 系统级 GLFW + GL
+# 或 Wayland: sudo pacman -S glfw-wayland
+python3 -c "import mujoco.viewer"    # 验证 GL 后端加载
+```
+修复后 `python3 -m mujoco.viewer --mjcf=scene_final.xml` 即可看到完整场地。
+当前查看场地用 docs/assets/rmuc2026_field_views.png(matplotlib 离屏渲染, 不依赖 GL)。
+
 ## ⚠️ 渲染问题(新发现, 2026-09-10)
 
 MuJoCo 3.13 对本场地 STL(195k 面)的**渲染失败**:碰撞数据编译正常(195k 面在),
